@@ -1,14 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
 					   xmlns:s="library://ns.adobe.com/flex/spark"
-					   xmlns:mx="library://ns.adobe.com/flex/mx" height="600">
+					   xmlns:mx="library://ns.adobe.com/flex/mx" height="600" creationComplete="windowedapplication1_creationCompleteHandler(event)" implements="view.IMainView">
 
 	<fx:Script>
 		<![CDATA[
-			protected function button1_clickHandler(event:MouseEvent):void
+			import mx.events.FlexEvent;
+			import mx.events.ItemClickEvent;
+
+			import presenter.MainPresenter;
+
+			import view.IMainView;
+			[Bindable]
+			private var m_presenter:MainPresenter;
+
+			public function setMediaType(value:String):void
 			{
-				// TODO Auto-generated method stub
+				if (value=="tv")
+				{
+					currentState = "tv";
+					tv.selected = true;
+				}
+				else
+				{
+					currentState = "movie";
+					movie.selected = true;
+				}
 			}
+
+			private function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
+			{
+				m_presenter = new MainPresenter(this);
+			}
+
+
+			private function mediaType_itemClickHandler(event:ItemClickEvent):void
+			{
+				currentState = mediaType.selection.id;
+			}
+
 		]]>
 	</fx:Script>
 
@@ -16,39 +46,40 @@
 		<s:State name="movie"/>
 		<s:State name="tv"/>
 	</s:states>
-	<fx:Script source="MainController.as"/>
 	<fx:Declarations>
 			<s:RadioButtonGroup id="mediaType"
-								itemClick="onMediaTypeChanged(event);">
+								itemClick="mediaType_itemClickHandler(event)">
 			</s:RadioButtonGroup>
 
 	</fx:Declarations>
 
 	<s:VGroup left="10" paddingLeft="10" paddingTop="10" width.tv="320" left.tv="10">
 		<s:HGroup right="0">
-			<s:TextInput id="inputDir"  text.movie="C:\mediamovertest"/>
-			<s:Button label="Scan" click="onScanDir(event);"/>
+			<s:TextInput id="inputDir"  text="@{m_presenter.inputDir}"/>
+			<s:Button label="Next" click="{m_presenter.scanNextFile()}"/>
+			<s:Button label="Skip" click="{m_presenter.scanNextFile(false)}" visible="{m_presenter.file!=null}"/>
 		</s:HGroup>
+		<s:Label id="currentFile" text="{m_presenter.currentFileName}"/>
 		<s:VGroup width="167" right="0">
 			<s:RadioButton x="10" group="{mediaType}" id="tv" label="TV Show" height="50"/>
 			<s:RadioButton x="10" group="{mediaType}" id="movie" label="Movie" height="50"/>
 		</s:VGroup>
 		<s:HGroup height="53" width="221" right="0">
 			<s:Label text="Name:" height="21"/>
-			<s:TextInput width="165"  id="mediaName"/>
+			<s:TextInput width="165"  id="mediaName" text="@{m_presenter.mediaName}"/>
 		</s:HGroup>
 		<s:HGroup height="53" width="221" includeIn="tv" right="0">
 			<s:Label height="21" text="Season:"/>
-			<s:TextInput width="150" id="seasonInput"/>
+			<s:TextInput width="150" id="seasonInput" text="@{m_presenter.season}"/>
 		</s:HGroup>
 		<s:HGroup height="53" width="221" includeIn="tv" right="0">
 			<s:Label height="21" text="Episode:"/>
-			<s:TextInput width="150" id="episodeInput"/>
+			<s:TextInput width="150" id="episodeInput" text="@{m_presenter.episode}"/>
 		</s:HGroup>
 		<s:HGroup height="53" width="221" includeIn="tv"  right="0">
 			<s:Label text="Target:" height="21"/>
-			<s:TextInput width="265" id="targetFolder"/>
+			<s:TextInput width="265" id="targetFolder" text="@{m_presenter.targetFolder}"/>
 		</s:HGroup>
-		<s:Button label="MOVE!" width="221" height="25"/>
+		<s:Label id="copyStatus" text="{m_presenter.copyStatus}"/>
 	</s:VGroup>
 </s:WindowedApplication>

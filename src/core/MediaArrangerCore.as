@@ -1,11 +1,16 @@
 package core
 {
 	import core.mediaInfo.Show;
+	import core.scrapers.TheTVDBScraper;
 	import core.utils.StringUtils;
+
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	import flash.filesystem.File;
 
 	import mx.utils.StringUtil;
 
-	public class MediaArrangerCore
+	public class MediaArrangerCore extends EventDispatcher
 	{
 		public function MediaArrangerCore()
 		{
@@ -43,8 +48,35 @@ package core
 				show.name = name;
 				show.episode 	= Number(RegExpLibrary.TV_EPISODE_NUMBER.exec(episode)[1]);
 				show.season 	= Number(RegExpLibrary.TV_SEASON_NUMBER.exec(season)[1]);
+
 			}
 			return show;
+		}
+
+		public function generateNFO(show:Show, location:File):void
+		{
+			var scraping:Boolean = false;
+			if (location.exists && location.isDirectory)
+			{
+				var nfo:File = new File(location.nativePath+"\\tvshow.nfo");
+				if (nfo.exists==false)
+				{
+					var scraper:TheTVDBScraper = new TheTVDBScraper();
+					scraper.addEventListener(Event.COMPLETE, onScrapingComplete);
+					scraper.generateNFO(show.name, nfo);
+					scraping = true;
+				}
+			}
+			if (scraping==false)
+			{
+				dispatchEvent(new Event(Event.COMPLETE));
+			}
+		}
+
+		private function onScrapingComplete(ev:Event):void
+		{
+			var scraper:TheTVDBScraper = ev.target as TheTVDBScraper;
+			dispatchEvent(ev);
 		}
 	}
 }

@@ -2,6 +2,7 @@ package presenter
 {
 	import core.MediaArrangerCore;
 	import core.mediaInfo.Show;
+	import core.scrapers.TheTVDBScraper;
 
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -17,7 +18,7 @@ package presenter
 
 	public class MainPresenter extends EventDispatcher
 	{
-		private var tv_location:String = "z:";
+		private var tv_location:String = "c:\\shows";
 		private var movie_location:String = "y:";
 		private var i:int = 0;
 		private var m_core:MediaArrangerCore = new MediaArrangerCore();
@@ -26,13 +27,14 @@ package presenter
 		private var m_currentShow:Show;
 
 		private var m_file:File;
-		private var m_inputDir:String = "C:\\mediamovertest";
+		private var m_inputDir:String = "C:\\share\\tv";
 		private var m_mediaName:String;
 		private var m_season:String;
 		private var m_episode:String;
 		private var m_targetFolder:String;
 		private var m_currentFileName:String;
 		private var m_copyStatus:String;
+		private var m_scraperStatus:String;
 
 		private var m_movementStack:Array = new Array();
 		private var m_copyInProgress:Boolean = false;
@@ -42,6 +44,16 @@ package presenter
 			m_view = view;
 		}
 
+		[Bindable]
+		public function get scraperStatus():String
+		{
+			return m_scraperStatus;
+		}
+
+		public function set scraperStatus(value:String):void
+		{
+			m_scraperStatus = value;
+		}
 
 		[Bindable]
 		public function get copyStatus():String
@@ -156,7 +168,7 @@ package presenter
 				{
 					var files:Array = dir.getDirectoryListing();
 					files.sortOn("name");
-					if (files.length==i)
+					if (i>=files.length)
 					{
 						i = 0;
 						if (i==startIndex)
@@ -182,6 +194,9 @@ package presenter
 			{
 				var moveFile:File = new File(file.nativePath);
 				var newLocation:File = new File(targetFolder);
+				scraperStatus = "Scraping "+m_currentShow.name;
+				m_core.addEventListener(Event.COMPLETE, onScrapingDone);
+				m_core.generateNFO(m_currentShow, new File(showBasePath));
 				if (m_copyInProgress==false)
 				{
 					moveFiles(moveFile, newLocation);
@@ -191,6 +206,12 @@ package presenter
 					m_movementStack.push({file:moveFile, location:newLocation});
 				}
 			}
+		}
+
+		private function onScrapingDone(ev:Event):void
+		{
+			scraperStatus = "Scraping done.";
+			m_core.removeEventListener(Event.COMPLETE, onScrapingDone);
 		}
 
 		private function moveFiles(moveFile:File, newLocation:File):void
@@ -264,7 +285,12 @@ package presenter
 
 		private function updateTargetName():void
 		{
-			targetFolder 	= tv_location + "\\" + m_currentShow.name + "\\" + "s"+m_currentShow.season + "\\" + m_currentShow.fileName;
+			targetFolder 	= showBasePath + "\\" + "s"+m_currentShow.season + "\\" + m_currentShow.fileName;
+		}
+
+		private function get showBasePath():String
+		{
+			return tv_location + "\\" + m_currentShow.name;
 		}
 
 		private function applyModifiedShowName():void

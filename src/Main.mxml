@@ -81,5 +81,6 @@
 			<s:TextInput width="265" id="targetFolder" text="@{m_presenter.targetFolder}"/>
 		</s:HGroup>
 		<s:Label id="copyStatus" text="{m_presenter.copyStatus}"/>
+		<s:Label id="scraperStatus" text="{m_presenter.scraperStatus}"/>
 	</s:VGroup>
 </s:WindowedApplication>

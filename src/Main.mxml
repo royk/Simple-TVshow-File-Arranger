@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+					   xmlns:s="library://ns.adobe.com/flex/spark"
+					   xmlns:mx="library://ns.adobe.com/flex/mx" height="600">
+
+	<fx:Script>
+		<![CDATA[
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+			}
+		]]>
+	</fx:Script>
+
+	<s:states>
+		<s:State name="movie"/>
+		<s:State name="tv"/>
+	</s:states>
+	<fx:Script source="MainController.as"/>
+	<fx:Declarations>
+			<s:RadioButtonGroup id="mediaType"
+								itemClick="onMediaTypeChanged(event);">
+			</s:RadioButtonGroup>
+
+	</fx:Declarations>
+
+	<s:VGroup left="10" paddingLeft="10" paddingTop="10" width.tv="320" left.tv="10">
+		<s:HGroup right="0">
+			<s:TextInput id="inputDir"  text.movie="C:\mediamovertest"/>
+			<s:Button label="Scan" click="onScanDir(event);"/>
+		</s:HGroup>
+		<s:VGroup width="167" right="0">
+			<s:RadioButton x="10" group="{mediaType}" id="tv" label="TV Show" height="50"/>
+			<s:RadioButton x="10" group="{mediaType}" id="movie" label="Movie" height="50"/>
+		</s:VGroup>
+		<s:HGroup height="53" width="221" right="0">
+			<s:Label text="Name:" height="21"/>
+			<s:TextInput width="165"  id="mediaName"/>
+		</s:HGroup>
+		<s:HGroup height="53" width="221" includeIn="tv" right="0">
+			<s:Label height="21" text="Season:"/>
+			<s:TextInput width="150" id="seasonInput"/>
+		</s:HGroup>
+		<s:HGroup height="53" width="221" includeIn="tv" right="0">
+			<s:Label height="21" text="Episode:"/>
+			<s:TextInput width="150" id="episodeInput"/>
+		</s:HGroup>
+		<s:HGroup height="53" width="221" includeIn="tv"  right="0">
+			<s:Label text="Target:" height="21"/>
+			<s:TextInput width="265" id="targetFolder"/>
+		</s:HGroup>
+		<s:Button label="MOVE!" width="221" height="25"/>
+	</s:VGroup>
+</s:WindowedApplication>

@@ -15,6 +15,7 @@ package presenter
 	import mx.collections.ArrayList;
 	import mx.collections.IList;
 	import mx.events.ItemClickEvent;
+	import mx.events.PropertyChangeEvent;
 
 	import view.IMainView;
 
@@ -214,9 +215,7 @@ package presenter
 							}
 							if (toAdd)
 							{
-								file = _file;
-								process();
-								addShowToPendingList();
+								m_files.push(_file);
 							}
 						}
 					}
@@ -224,23 +223,18 @@ package presenter
 			}
 		}
 
-		public function scanNextFile(movePreviousFile:Boolean=true):void
+		public function scanDirectory():void
 		{
-			if (movePreviousFile)
+			crawlFiles();
+			m_files.sortOn("name");
+			for (var i:int=0; i<m_files.length; i++)
 			{
-				addFileToPendingList();
-			}
-			m_previousShow = m_currentShow;
-			m_currentShow = null;
-			if (m_files==null || m_files.length==0)
-			{
-				crawlFiles();
-				m_files.sortOn("name");
-			}
-			if (m_files.length)
-			{
-				file = m_files.shift();
+				file = m_files[i];
 				process();
+				if (m_currentShow)
+				{
+					addFileToPendingList();
+				}
 			}
 		}
 
@@ -258,10 +252,29 @@ package presenter
 		{
 			if (selectedItems.length)
 			{
-				var show:Show = selectedItems[0].show;
-				season 			= show.season.toString();
-				mediaName 		= show.name;
+				m_currentShow = selectedItems[0].show;
+				season 			= m_currentShow.season.toString();
+				mediaName 		= m_currentShow.name;
 				updateTargetName();
+			}
+		}
+
+		public function applyChanges(selectedItems:Vector.<Object>):void
+		{
+			for each (var o:Object in selectedItems)
+			{
+				(o.show as Show).name = mediaName;
+				(o.show as Show).season = int(season);
+				o.location = new File(getTargetName(o.show));
+				o.label = o.location.nativePath;
+			}
+		}
+
+		public function removeFromPendingList(selectedItems:Vector.<Object>):void
+		{
+			for each (var o:Object in selectedItems)
+			{
+				m_movementStack.removeItem(o);
 			}
 		}
 
@@ -277,7 +290,7 @@ package presenter
 					{
 						scraperStatus = "Scraping "+m_currentShow.name;
 						m_core.addEventListener(Event.COMPLETE, onScrapingDone);
-						m_core.generateNFO(m_currentShow, new File(showBasePath));
+						m_core.generateNFO(m_currentShow, new File(showBasePath(m_currentShow)));
 					}
 					pendingFiles.addItem({file:moveFile, location:newLocation, label:newLocation.nativePath, show:m_currentShow});
 				}
@@ -331,15 +344,12 @@ package presenter
 
 		private function process():void
 		{
+			m_currentShow = null;
 			var res:Object = m_core.extractEpisodeInfo(file.name);
 			if (res)
 			{
 				var show:Show = m_core.processShow(file.name, res);
 				applyShowData(show);
-			}
-			else
-			{
-				applyMovieData(file);
 			}
 		}
 
@@ -356,12 +366,17 @@ package presenter
 
 		private function updateTargetName():void
 		{
-			targetFolder = showBasePath + "\\" + "s"+m_currentShow.season + "\\" + m_currentShow.fileName;
+			targetFolder = getTargetName(m_currentShow);
 		}
 
-		private function get showBasePath():String
+		private function getTargetName(show:Show):String
 		{
-			return targetBase + "\\" + m_currentShow.name;
+			return showBasePath(show) + "\\" + "s"+show.season + "\\" + show.fileName;
+		}
+
+		private function showBasePath(show:Show):String
+		{
+			return targetBase + "\\" + show.name;
 		}
 
 		private function applyModifiedShowName():void

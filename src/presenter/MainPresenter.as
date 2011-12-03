@@ -32,7 +32,6 @@ package presenter
 		private var m_inputDir:String = "C:\\share\\tv";
 		private var m_mediaName:String;
 		private var m_season:String;
-		private var m_episode:String;
 		private var m_targetFolder:String;
 		private var m_currentFileName:String;
 		private var m_copyStatus:String;
@@ -168,18 +167,6 @@ package presenter
 		}
 
 		[Bindable]
-		public function get episode():String
-		{
-			return m_episode;
-		}
-
-		public function set episode(value:String):void
-		{
-			m_episode = value;
-			updateTargetName();
-		}
-
-		[Bindable]
 		public function get targetFolder():String
 		{
 			return m_targetFolder;
@@ -227,7 +214,9 @@ package presenter
 							}
 							if (toAdd)
 							{
-								m_files.push(_file);
+								file = _file;
+								process();
+								addShowToPendingList();
 							}
 						}
 					}
@@ -239,7 +228,7 @@ package presenter
 		{
 			if (movePreviousFile)
 			{
-				move();
+				addFileToPendingList();
 			}
 			m_previousShow = m_currentShow;
 			m_currentShow = null;
@@ -265,9 +254,20 @@ package presenter
 			}
 		}
 
-		private function move():void
+		public function modifyFiles(selectedItems:Vector.<Object>):void
 		{
-			if (file)
+			if (selectedItems.length)
+			{
+				var show:Show = selectedItems[0].show;
+				season 			= show.season.toString();
+				mediaName 		= show.name;
+				updateTargetName();
+			}
+		}
+
+		private function addFileToPendingList():void
+		{
+			if (file && targetFolder)
 			{
 				var moveFile:File = new File(file.nativePath);
 				var newLocation:File = new File(targetFolder);
@@ -279,7 +279,7 @@ package presenter
 						m_core.addEventListener(Event.COMPLETE, onScrapingDone);
 						m_core.generateNFO(m_currentShow, new File(showBasePath));
 					}
-					pendingFiles.addItem({file:moveFile, location:newLocation, label:moveFile.nativePath});
+					pendingFiles.addItem({file:moveFile, location:newLocation, label:newLocation.nativePath, show:m_currentShow});
 				}
 				else
 				{
@@ -349,7 +349,6 @@ package presenter
 			m_currentShow.originalName = show.name;
 			applyModifiedShowName();
 			season 			= m_currentShow.season.toString();
-			episode 		= m_currentShow.episode.toString();
 			mediaName 		= m_currentShow.name;
 			updateTargetName();
 			m_view.setMediaType("tv");

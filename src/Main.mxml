@@ -78,10 +78,6 @@
 				<s:Label height="21" text="Season:"/>
 				<s:TextInput width="150" id="seasonInput" text="@{m_presenter.season}"/>
 			</s:HGroup>
-			<s:HGroup height="53" width="221" includeIn="tv" right="0">
-				<s:Label height="21" text="Episode:"/>
-				<s:TextInput width="150" id="episodeInput" text="@{m_presenter.episode}"/>
-			</s:HGroup>
 			<s:HGroup height="53" width="221" includeIn="tv"  right="0">
 				<s:Label text="Target:" height="21"/>
 				<s:TextInput width="265" id="targetFolder" text="@{m_presenter.targetFolder}"/>
@@ -91,7 +87,7 @@
 			<s:Button label="Move!" click="{m_presenter.beginMove();}"/>
 		</s:VGroup>
 		<mx:Spacer width="20"/>
-		<s:List dataProvider="{m_presenter.pendingFiles}" bottom="10" right="10" width="100%" height="100%">
+		<s:List id="pendingList" dataProvider="{m_presenter.pendingFiles}" change="{m_presenter.modifyFiles(pendingList.selectedItems)}" bottom="10" right="10" width="100%" height="100%">
 
 		</s:List>
 	</s:HGroup>

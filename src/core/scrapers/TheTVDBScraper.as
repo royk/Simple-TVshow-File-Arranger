@@ -19,7 +19,8 @@ package core.scrapers
 
 		static private const GET_SERIES:String = "GetSeries.php";
 
-		private var m_location:File;
+		private var m_location	:File;
+		private var m_name		:String;
 
 		public function TheTVDBScraper()
 		{
@@ -30,13 +31,14 @@ package core.scrapers
 			var req		:URLRequest;
 			var data	:URLVariables;
 			var loader	:URLLoader;
-			m_location = location;
-			data = new URLVariables();
+			m_location 	= location;
+			m_name 		= name;
+			data 		= new URLVariables();
 			data.seriesname = name;
-			req = new URLRequest(API_PATH+GET_SERIES);
-			req.method = URLRequestMethod.GET;
-			req.data = data;
-			loader = new URLLoader();
+			req 		= new URLRequest(API_PATH+GET_SERIES);
+			req.method 	= URLRequestMethod.GET;
+			req.data 	= data;
+			loader 		= new URLLoader();
 			loader.dataFormat = URLLoaderDataFormat.TEXT;
 			loader.addEventListener(Event.COMPLETE, onSeriesLoaded);
 			loader.load(req);
@@ -58,7 +60,28 @@ package core.scrapers
 					dispatchEvent(new Event(Event.COMPLETE));
 					return;
 				}
-				generateBasicNFO(xml);
+				if (xml.children().length()==0)
+				{
+					searchWithLessTerms();
+				}
+				else
+				{
+					generateBasicNFO(xml);
+				}
+			}
+		}
+		// Searh again, removing a trailing word from the search term
+		private function searchWithLessTerms():void
+		{
+			var words:Array = m_name.split(" ");
+			if (words.length>1)
+			{
+				words.pop();
+				generateNFO(words.join(" "), m_location);
+			}
+			else
+			{
+				dispatchEvent(new Event(Event.COMPLETE));
 			}
 		}
 
@@ -70,10 +93,10 @@ package core.scrapers
 							<imdbid></imdbid>
 							<plot></plot>
 						</tvshow>;
-			nfo.id[0] = xml..seriesid.text();
-			nfo.imdbid[0] =xml..IMDB_ID.text();
-			nfo.title[0] = xml..SeriesName.text();
-			nfo.plot[0] = xml..Overview.text();
+			nfo.id[0] = xml.Series[0].seriesid.text();
+			nfo.imdbid[0] =xml.Series[0].IMDB_ID.text();
+			nfo.title[0] = xml.Series[0].SeriesName.text();
+			nfo.plot[0] = xml.Series[0].Overview.text();
 			var stream:FileStream = new FileStream();
 			stream.open(m_location, FileMode.WRITE);
 			stream.writeUTFBytes(nfo.toXMLString());

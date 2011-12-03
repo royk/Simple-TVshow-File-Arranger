@@ -12,6 +12,8 @@ package presenter
 	import flash.filesystem.File;
 	import flash.net.FileReference;
 
+	import mx.collections.ArrayList;
+	import mx.collections.IList;
 	import mx.events.ItemClickEvent;
 
 	import view.IMainView;
@@ -35,13 +37,50 @@ package presenter
 		private var m_currentFileName:String;
 		private var m_copyStatus:String;
 		private var m_scraperStatus:String;
+		private var m_targetBase:String = "c:\\shows";
+		private var m_scrape:Boolean = false;
 
-		private var m_movementStack:Array = new Array();
+		private var m_movementStack:ArrayList = new ArrayList();
 		private var m_copyInProgress:Boolean = false;
+		private var m_files:Array;
 
 		public function MainPresenter(view:IMainView)
 		{
 			m_view = view;
+		}
+
+		[Bindable]
+		public function get pendingFiles():IList
+		{
+			return m_movementStack as IList;
+		}
+
+		public function set pendingFiles(value:IList):void
+		{
+			m_movementStack = value as ArrayList;
+		}
+
+		[Bindable]
+		public function get targetBase():String
+		{
+			return m_targetBase;
+		}
+
+		public function set targetBase(value:String):void
+		{
+			m_targetBase = value;
+			updateTargetName();
+		}
+
+		[Bindable]
+		public function get scrape():Boolean
+		{
+			return m_scrape;
+		}
+
+		public function set scrape(value:Boolean):void
+		{
+			m_scrape = value;
 		}
 
 		[Bindable]
@@ -77,7 +116,7 @@ package presenter
 			m_file = value;
 			if (m_file)
 			{
-				currentFileName = m_file.name;
+				currentFileName = m_file.nativePath;
 			}
 		}
 
@@ -151,6 +190,51 @@ package presenter
 			m_targetFolder = value;
 		}
 
+		private function crawlFiles():void
+		{
+			m_files = new Array();
+			var dir:File = new File(inputDir);
+			crawlDir(dir);
+		}
+
+		private function crawlDir(dir:File):void
+		{
+			if (dir.exists && dir.isDirectory)
+			{
+				var files:Array = dir.getDirectoryListing();
+				files.sortOn("name");
+				for (var i:int=0; i<files.length; i++)
+				{
+					var _file:File = files[i] as File;
+					if (_file.exists)
+					{
+						if (_file.isDirectory)
+						{
+							crawlDir(_file);
+						}
+						else
+						if (_file.extension!="nfo")
+						{
+							var toAdd:Boolean = true;
+							for (var j:int=0; j<pendingFiles.length; j++)
+							{
+								var toMove:Object = (pendingFiles.getItemAt(j) as Object);
+								if (toMove.file.nativePath==_file.nativePath)
+								{
+									toAdd = false;
+									break;
+								}
+							}
+							if (toAdd)
+							{
+								m_files.push(_file);
+							}
+						}
+					}
+				}
+			}
+		}
+
 		public function scanNextFile(movePreviousFile:Boolean=true):void
 		{
 			if (movePreviousFile)
@@ -159,33 +243,26 @@ package presenter
 			}
 			m_previousShow = m_currentShow;
 			m_currentShow = null;
-			var dir:File = new File(inputDir);
-			var found:Boolean = false;
-			var startIndex:int = i;
-			while(found==false)
+			if (m_files==null || m_files.length==0)
 			{
-				if (dir.exists && dir.isDirectory)
-				{
-					var files:Array = dir.getDirectoryListing();
-					files.sortOn("name");
-					if (i>=files.length)
-					{
-						i = 0;
-						if (i==startIndex)
-						{
-							break;
-						}
-					}
-					file = files[i] as File;
-					if (file && file.isDirectory==false)
-					{
-						found = true;
-						process();
-					}
-					i++;
-				}
+				crawlFiles();
+				m_files.sortOn("name");
 			}
+			if (m_files.length)
+			{
+				file = m_files.shift();
+				process();
+			}
+		}
 
+		public function beginMove():void
+		{
+			if (pendingFiles.length>0)
+			{
+				var data:Object = pendingFiles.getItemAt(0);
+				moveFiles(data.file, data.location);
+				(pendingFiles as ArrayList).removeItem(data);
+			}
 		}
 
 		private function move():void
@@ -194,16 +271,19 @@ package presenter
 			{
 				var moveFile:File = new File(file.nativePath);
 				var newLocation:File = new File(targetFolder);
-				scraperStatus = "Scraping "+m_currentShow.name;
-				m_core.addEventListener(Event.COMPLETE, onScrapingDone);
-				m_core.generateNFO(m_currentShow, new File(showBasePath));
-				if (m_copyInProgress==false)
+				if (newLocation.exists==false)
 				{
-					moveFiles(moveFile, newLocation);
+					if (scrape)
+					{
+						scraperStatus = "Scraping "+m_currentShow.name;
+						m_core.addEventListener(Event.COMPLETE, onScrapingDone);
+						m_core.generateNFO(m_currentShow, new File(showBasePath));
+					}
+					pendingFiles.addItem({file:moveFile, location:newLocation, label:moveFile.nativePath});
 				}
 				else
 				{
-					m_movementStack.push({file:moveFile, location:newLocation});
+					copyStatus = "File already exists, skipping";
 				}
 			}
 		}
@@ -233,11 +313,7 @@ package presenter
 			}
 			m_copyInProgress = false;
 			copyStatus = "Completed";
-			if (m_movementStack.length)
-			{
-				var data:Object = m_movementStack.shift();
-				moveFiles(data.file, data.location);
-			}
+			beginMove();
 		}
 
 		private function onMoveError(ev:IOErrorEvent):void
@@ -250,11 +326,7 @@ package presenter
 			}
 			m_copyInProgress = false;
 			copyStatus = "Error: "+ev.text;
-			if (m_movementStack.length)
-			{
-				var data:Object = m_movementStack.shift();
-				moveFiles(data.file, data.location);
-			}
+			beginMove();
 		}
 
 		private function process():void
@@ -285,12 +357,12 @@ package presenter
 
 		private function updateTargetName():void
 		{
-			targetFolder 	= showBasePath + "\\" + "s"+m_currentShow.season + "\\" + m_currentShow.fileName;
+			targetFolder = showBasePath + "\\" + "s"+m_currentShow.season + "\\" + m_currentShow.fileName;
 		}
 
 		private function get showBasePath():String
 		{
-			return tv_location + "\\" + m_currentShow.name;
+			return targetBase + "\\" + m_currentShow.name;
 		}
 
 		private function applyModifiedShowName():void

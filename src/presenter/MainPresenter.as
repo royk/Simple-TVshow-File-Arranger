@@ -292,7 +292,10 @@ package presenter
 						m_core.addEventListener(Event.COMPLETE, onScrapingDone);
 						m_core.generateNFO(m_currentShow, new File(showBasePath(m_currentShow)));
 					}
-					pendingFiles.addItem({file:moveFile, location:newLocation, label:newLocation.nativePath, show:m_currentShow});
+					pendingFiles.addItem({	file:moveFile,
+											location:newLocation,
+											pathBase:targetBase,
+											show:m_currentShow});
 				}
 				else
 				{

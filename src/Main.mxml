@@ -11,6 +11,7 @@
 			import presenter.MainPresenter;
 
 			import view.IMainView;
+			import view.MainViewPendingRenderer;
 			[Bindable]
 			private var m_presenter:MainPresenter;
 
@@ -90,7 +91,7 @@
 			<s:Button label="Move!" click="{m_presenter.beginMove();}"/>
 		</s:VGroup>
 		<mx:Spacer width="20"/>
-		<s:List id="pendingList" dataProvider="{m_presenter.pendingFiles}" change="{m_presenter.modifyFiles(pendingList.selectedItems)}" bottom="10" right="10" width="100%" height="100%" allowMultipleSelection="true">
+		<s:List id="pendingList" dataProvider="{m_presenter.pendingFiles}" change="{m_presenter.modifyFiles(pendingList.selectedItems)}" bottom="10" right="10" width="100%" height="100%" allowMultipleSelection="true" itemRenderer="view.MainViewPendingRenderer">
 
 		</s:List>
 	</s:HGroup>

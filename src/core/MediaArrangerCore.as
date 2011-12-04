@@ -1,5 +1,7 @@
 package core
 {
+	import core.fileIO.AIRFileIO;
+	import core.fileIO.IFileIOObserver;
 	import core.mediaInfo.Show;
 	import core.scrapers.TheTVDBScraper;
 	import core.utils.StringUtils;
@@ -19,6 +21,12 @@ package core
 		public function extractEpisodeInfo(fileName:String):Object
 		{
 			return RegExpLibrary.TV_EPISODE_INFO.exec(fileName);
+		}
+
+		public function moveFiles(file:String, directory:String, observer:IFileIOObserver):void
+		{
+			var fileIO:AIRFileIO = new AIRFileIO();
+			fileIO.move(file, directory, observer);
 		}
 
 		public function processShow(fileName:String, episodeInfo:Object):Show

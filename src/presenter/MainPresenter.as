@@ -1,6 +1,7 @@
 package presenter
 {
 	import core.MediaArrangerCore;
+	import core.fileIO.IFileIOObserver;
 	import core.mediaInfo.Show;
 	import core.scrapers.TheTVDBScraper;
 
@@ -10,7 +11,6 @@ package presenter
 	import flash.events.IOErrorEvent;
 	import flash.events.MouseEvent;
 	import flash.filesystem.File;
-	import flash.net.FileReference;
 
 	import mx.collections.ArrayList;
 	import mx.collections.IList;
@@ -19,7 +19,7 @@ package presenter
 
 	import view.IMainView;
 
-	public class MainPresenter extends EventDispatcher
+	public class MainPresenter extends EventDispatcher implements IFileIOObserver
 	{
 		private var tv_location:String = "c:\\shows";
 		private var movie_location:String = "y:";
@@ -48,6 +48,7 @@ package presenter
 		{
 			m_view = view;
 		}
+
 
 		[Bindable]
 		public function get pendingFiles():IList
@@ -243,10 +244,23 @@ package presenter
 			if (pendingFiles.length>0)
 			{
 				var data:Object = pendingFiles.getItemAt(0);
-				moveFiles(data.file, data.location);
 				(pendingFiles as ArrayList).removeItem(data);
+				m_core.moveFiles(data.file.nativePath, data.location.nativePath, this);
 			}
 		}
+
+		public function moveSuccess():void
+		{
+			copyStatus = "Move succeeded";
+			beginMove();
+		}
+
+		public function moveError(failedFile:String, reason:String):void
+		{
+			copyStatus = "Failed moving: "+failedFile+". "+reason;
+			beginMove();
+		}
+
 
 		public function modifyFiles(selectedItems:Vector.<Object>):void
 		{
@@ -308,41 +322,6 @@ package presenter
 		{
 			scraperStatus = "Scraping done.";
 			m_core.removeEventListener(Event.COMPLETE, onScrapingDone);
-		}
-
-		private function moveFiles(moveFile:File, newLocation:File):void
-		{
-			m_copyInProgress = true;
-			copyStatus = "Moving to: "+newLocation.nativePath;
-			moveFile.moveToAsync(newLocation);
-			moveFile.addEventListener(Event.COMPLETE, onMoveComplete);
-			moveFile.addEventListener(IOErrorEvent.IO_ERROR, onMoveError);
-		}
-
-		private function onMoveComplete(ev:Event):void
-		{
-			var moveFile:File = ev.target as File;
-			if (moveFile)
-			{
-				moveFile.removeEventListener(Event.COMPLETE, onMoveComplete);
-				moveFile.removeEventListener(IOErrorEvent.IO_ERROR, onMoveError);
-			}
-			m_copyInProgress = false;
-			copyStatus = "Completed";
-			beginMove();
-		}
-
-		private function onMoveError(ev:IOErrorEvent):void
-		{
-			var moveFile:File = ev.target as File;
-			if (moveFile)
-			{
-				moveFile.removeEventListener(Event.COMPLETE, onMoveComplete);
-				moveFile.removeEventListener(IOErrorEvent.IO_ERROR, onMoveError);
-			}
-			m_copyInProgress = false;
-			copyStatus = "Error: "+ev.text;
-			beginMove();
 		}
 
 		private function process():void

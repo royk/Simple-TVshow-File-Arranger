@@ -1,0 +1,12 @@
+This is not a scraper anymore (although there's a class dedicatd to simple tv show scraping if you're interested in a super simple code example for one). This project is (yet another) <b>TV show files organizer</b>.
+
+The purpose is to let the user scan a folder with tv shows, and move them to a new folder according to some scheme (only \showname\season is supported for now). No file renamig takes place.
+
+What sets this tool apart is that it relies solely on the filename to decide the file's target location, and lets the user easily modify massive amounts of files if the app got their target location wrong.
+
+Architecture
+
+The UI is separated to Viewer and Presenter, with two way binding instead of a Data module.
+
+The Presenter utilizes classes from the core package that perform decoupled business logic tasks.
+

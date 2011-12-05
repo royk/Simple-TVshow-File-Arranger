@@ -7,7 +7,7 @@
 		<![CDATA[
 			override public function set data(value:Object):void
 			{
-				if (value)
+				if (value && value.show)
 				{
 					showPath.htmlText = value.pathBase+"\\<font color='#ff0000'>"+value.show.name+"</font>"+"\\<font color='#c71585'>s"+value.show.season+"</font>\\"+value.show.fileName;
 				}

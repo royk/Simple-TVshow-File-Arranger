@@ -42,7 +42,7 @@ package presenter
 
 		private var m_movementStack:ArrayList = new ArrayList();
 		private var m_copyInProgress:Boolean = false;
-		private var m_files:Array;
+		private var m_files	:Vector.<String>;
 
 		public function MainPresenter(view:IMainView)
 		{
@@ -181,61 +181,29 @@ package presenter
 
 		private function crawlFiles():void
 		{
-			m_files = new Array();
 			var dir:File = new File(inputDir);
-			crawlDir(dir);
-		}
-
-		private function crawlDir(dir:File):void
-		{
-			if (dir.exists && dir.isDirectory)
-			{
-				var files:Array = dir.getDirectoryListing();
-				files.sortOn("name");
-				for (var i:int=0; i<files.length; i++)
-				{
-					var _file:File = files[i] as File;
-					if (_file.exists)
-					{
-						if (_file.isDirectory)
-						{
-							crawlDir(_file);
-						}
-						else
-						if (_file.extension!="nfo")
-						{
-							var toAdd:Boolean = true;
-							for (var j:int=0; j<pendingFiles.length; j++)
-							{
-								var toMove:Object = (pendingFiles.getItemAt(j) as Object);
-								if (toMove.file.nativePath==_file.nativePath)
-								{
-									toAdd = false;
-									break;
-								}
-							}
-							if (toAdd)
-							{
-								m_files.push(_file);
-							}
-						}
-					}
-				}
-			}
+			m_files = m_core.crawlDirectory(dir, true);
 		}
 
 		public function scanDirectory():void
 		{
 			crawlFiles();
-			m_files.sortOn("name");
+			m_files.sort(
+				function(a:String, b:String):Number
+				{
+					if (a<b)
+						return -1;
+					if (a>b)
+						return 1;
+					return 0;
+				}
+
+			);
 			for (var i:int=0; i<m_files.length; i++)
 			{
-				file = m_files[i];
+				file = new File(m_files[i]);
 				process();
-				if (m_currentShow)
-				{
-					addFileToPendingList();
-				}
+				addFileToPendingList();
 			}
 		}
 

@@ -29,6 +29,35 @@ package core
 			fileIO.move(file, directory, observer);
 		}
 
+		public function crawlDirectory(dir:File, recursive:Boolean):Vector.<String>
+		{
+			var result	:Vector.<String> 	= new Vector.<String>();
+			var files	:Array;
+			var file	:File;
+			var i		:int;
+			if (dir && dir.exists && dir.isDirectory)
+			{
+				files = dir.getDirectoryListing();
+				files.sortOn("name");
+				for (i=0; i<files.length; i++)
+				{
+					file = files[i] as File;
+					if (file.exists)
+					{
+						if (file.isDirectory && recursive==true)
+						{
+							result = result.concat(crawlDirectory(file, recursive))
+						}
+						else
+						{
+							result.push(file.nativePath);
+						}
+					}
+				}
+			}
+			return result;
+		}
+
 		public function processShow(fileName:String, episodeInfo:Object):Show
 		{
 			var show:Show = new Show();

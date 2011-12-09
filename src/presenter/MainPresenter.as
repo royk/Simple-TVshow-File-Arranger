@@ -39,6 +39,7 @@ package presenter
 		private var m_scraperStatus:String;
 		private var m_targetBase:String = "c:\\shows";
 		private var m_scrape:Boolean = false;
+		private var m_recursiveScan:Boolean = true;
 
 		private var m_movementStack:ArrayList = new ArrayList();
 		private var m_copyInProgress:Boolean = false;
@@ -49,6 +50,17 @@ package presenter
 			m_view = view;
 		}
 
+
+		[Bindable]
+		public function get recursiveScan():Boolean
+		{
+			return m_recursiveScan;
+		}
+
+		public function set recursiveScan(value:Boolean):void
+		{
+			m_recursiveScan = value;
+		}
 
 		[Bindable]
 		public function get pendingFiles():IList
@@ -182,7 +194,7 @@ package presenter
 		private function crawlFiles():void
 		{
 			var dir:File = new File(inputDir);
-			m_files = m_core.crawlDirectory(dir, true);
+			m_files = m_core.crawlDirectory(dir, m_recursiveScan);
 		}
 
 		public function scanDirectory():void
@@ -220,6 +232,7 @@ package presenter
 			}
 		}
 
+		// IFileIOObserver functions
 		public function moveSuccess():void
 		{
 			copyStatus = "Move succeeded";
@@ -231,6 +244,7 @@ package presenter
 			copyStatus = "Failed moving: "+failedFile+". "+reason;
 			beginMove();
 		}
+		// END IFileIOObserver functions
 
 
 		public function modifyFiles(selectedItems:Vector.<Object>):void

@@ -59,6 +59,7 @@
 				<s:Label text="Source path:"/>
 				<s:TextInput id="inputDir"  text="@{m_presenter.inputDir}"/>
 				<s:Button label="Scan" click="{m_presenter.scanDirectory()}"/>
+				<s:CheckBox label="Recursive" selected="@{m_presenter.recursiveScan}"/>
 			</s:HGroup>
 			<s:Label id="currentFile" text="{m_presenter.currentFileName}"/>
 			<s:VGroup width="167" right="0">

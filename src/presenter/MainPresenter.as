@@ -316,8 +316,11 @@ package presenter
 			if (res)
 			{
 				var show:Show = m_core.processShow(file.name, res);
-				applyShowData(show);
-				return true;
+				if (show)
+				{
+					applyShowData(show);
+					return true;
+				}
 			}
 			return false;
 		}

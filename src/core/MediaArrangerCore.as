@@ -2,6 +2,7 @@ package core
 {
 	import core.db.IShowsDB;
 	import core.db.ShowsDB;
+	import core.db.XBMCShowsDB;
 	import core.fileIO.AIRFileIO;
 	import core.fileIO.IFileIOObserver;
 	import core.mediaInfo.Show;
@@ -20,9 +21,8 @@ package core
 
 		public function MediaArrangerCore()
 		{
-			m_showsDB = new ShowsDB();
+			m_showsDB = new XBMCShowsDB();
 			m_showsDB.init();
-			m_showsDB.addShow("test");
 			var res:Array = m_showsDB.getShows();
 		}
 

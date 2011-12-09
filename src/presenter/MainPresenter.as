@@ -22,7 +22,6 @@ package presenter
 	public class MainPresenter extends EventDispatcher implements IFileIOObserver
 	{
 		private var tv_location:String = "c:\\shows";
-		private var movie_location:String = "y:";
 		private var i:int = 0;
 		private var m_core:MediaArrangerCore = new MediaArrangerCore();
 		private var m_view:IMainView;
@@ -333,7 +332,6 @@ package presenter
 			season 			= m_currentShow.season.toString();
 			mediaName 		= m_currentShow.name;
 			updateTargetName();
-			m_view.setMediaType("tv");
 		}
 
 		private function updateTargetName():void
@@ -360,12 +358,6 @@ package presenter
 					m_currentShow.name = m_previousShow.name;
 				}
 			}
-		}
-
-
-		private function applyMovieData(file:File):void
-		{
-			m_view.setMediaType("movie");
 		}
 	}
 }

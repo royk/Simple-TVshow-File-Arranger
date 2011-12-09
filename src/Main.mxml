@@ -15,20 +15,6 @@
 			[Bindable]
 			private var m_presenter:MainPresenter;
 
-			public function setMediaType(value:String):void
-			{
-				if (value=="tv")
-				{
-					currentState = "tv";
-					tv.selected = true;
-				}
-				else
-				{
-					currentState = "movie";
-					movie.selected = true;
-				}
-			}
-
 			private function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
 			{
 				m_presenter = new MainPresenter(this);
@@ -43,10 +29,6 @@
 		]]>
 	</fx:Script>
 
-	<s:states>
-		<s:State name="movie"/>
-		<s:State name="tv"/>
-	</s:states>
 	<fx:Declarations>
 			<s:RadioButtonGroup id="mediaType"
 								itemClick="mediaType_itemClickHandler(event)">
@@ -62,15 +44,11 @@
 				<s:CheckBox label="Recursive" selected="@{m_presenter.recursiveScan}"/>
 			</s:HGroup>
 			<s:Label id="currentFile" text="{m_presenter.currentFileName}"/>
-			<s:VGroup width="167" right="0">
-				<s:RadioButton x="10" group="{mediaType}" id="tv" label="TV Show" height="50"/>
-				<s:RadioButton x="10" group="{mediaType}" id="movie" label="Movie" height="50"/>
-			</s:VGroup>
 			<s:HGroup height="53" width="221" right="0">
 				<s:Label text="Name:" height="21"/>
 				<s:TextInput width="165"  id="mediaName" text="@{m_presenter.mediaName}"/>
 			</s:HGroup>
-			<s:HGroup height="53" width="221" includeIn="tv" right="0">
+			<s:HGroup height="53" width="221" right="0">
 				<s:Label height="21" text="Season:"/>
 				<s:TextInput width="150" id="seasonInput" text="@{m_presenter.season}"/>
 			</s:HGroup>
@@ -79,7 +57,7 @@
 				<s:TextInput id="targetBase" text="@{m_presenter.targetBase}"/>
 				<s:CheckBox label="Scrape" selected="@{m_presenter.scrape}"/>
 			</s:HGroup>
-			<s:HGroup height="53" width="221" includeIn="tv"  right="0">
+			<s:HGroup height="53" width="221" right="0">
 				<s:Label text="Move to:" height="21"/>
 				<s:TextInput width="265" id="targetFolder" text="@{m_presenter.targetFolder}"/>
 			</s:HGroup>

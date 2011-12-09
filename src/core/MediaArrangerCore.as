@@ -23,10 +23,10 @@ package core
 			return RegExpLibrary.TV_EPISODE_INFO.exec(fileName);
 		}
 
-		public function moveFiles(file:String, directory:String, observer:IFileIOObserver):void
+		public function moveFiles(filePath:String, toDirectoryPath:String, observer:IFileIOObserver):void
 		{
 			var fileIO:AIRFileIO = new AIRFileIO();
-			fileIO.move(file, directory, observer);
+			fileIO.move(filePath, toDirectoryPath, observer);
 		}
 
 		public function crawlDirectory(dir:File, recursive:Boolean):Vector.<String>

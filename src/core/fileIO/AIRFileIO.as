@@ -12,25 +12,25 @@ package core.fileIO
 		{
 		}
 
-		public function move(file:String, to:String, observer:IFileIOObserver):void
+		public function move(filePath:String, targetDirectoryPath:String, observer:IFileIOObserver):void
 		{
 			m_observer = observer;
-			var source:File = new File(file);
+			var source:File = new File(filePath);
 			if (source && source.exists && source.isDirectory==false)
 			{
-				var target:File = new File(to);
+				var target:File = new File(targetDirectoryPath);
 				if (target && target.exists==false && target.isDirectory==false)
 				{
 					moveFile(source, target);
 				}
 				else
 				{
-					m_observer.moveError(file, "Invalid target location!");
+					m_observer.moveError(filePath, "Invalid target location!");
 				}
 			}
 			else
 			{
-				m_observer.moveError(file, "Invalid source file!");
+				m_observer.moveError(filePath, "Invalid source file!");
 			}
 		}
 

@@ -189,6 +189,7 @@ package presenter
 		{
 			crawlFiles();
 			m_files.sort(
+				// sort files by name over the entire path
 				function(a:String, b:String):Number
 				{
 					if (a<b)
@@ -202,8 +203,10 @@ package presenter
 			for (var i:int=0; i<m_files.length; i++)
 			{
 				file = new File(m_files[i]);
-				process();
-				addFileToPendingList();
+				if (process())
+				{
+					addFileToPendingList();
+				}
 			}
 		}
 
@@ -292,7 +295,7 @@ package presenter
 			m_core.removeEventListener(Event.COMPLETE, onScrapingDone);
 		}
 
-		private function process():void
+		private function process():Boolean
 		{
 			m_currentShow = null;
 			var res:Object = m_core.extractEpisodeInfo(file.name);
@@ -300,7 +303,9 @@ package presenter
 			{
 				var show:Show = m_core.processShow(file.name, res);
 				applyShowData(show);
+				return true;
 			}
+			return false;
 		}
 
 		private function applyShowData(show:Show):void

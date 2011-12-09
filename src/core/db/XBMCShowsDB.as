@@ -6,6 +6,8 @@ package core.db
 
 	public class XBMCShowsDB extends ShowsSQLiteBase
 	{
+		private var m_showNames:Array;
+
 		public function XBMCShowsDB()
 		{
 		}
@@ -20,7 +22,7 @@ package core.db
 		{
 		}
 
-		override public function getShows():Array
+		protected function generateShowNames():Array
 		{
 			var statement:SQLStatement;
 			var res:Array;
@@ -46,5 +48,18 @@ package core.db
 			}
 			return res;
 		}
+
+		/**
+		 * Fetches show names from DB. Caches the result.
+		 */
+		override public function getShows():Array
+		{
+			if (m_showNames==null)
+			{
+				m_showNames = generateShowNames();
+			}
+			return m_showNames;
+		}
+
 	}
 }

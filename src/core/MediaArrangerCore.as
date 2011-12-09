@@ -23,7 +23,6 @@ package core
 		{
 			m_showsDB = new XBMCShowsDB();
 			m_showsDB.init();
-			var res:Array = m_showsDB.getShows();
 		}
 
 		public function extractEpisodeInfo(fileName:String):Object
@@ -96,7 +95,7 @@ package core
 					name = StringUtils.globalReplace(name, ".", " ");
 					name = StringUtils.capitalizeWords(name);
 					name = StringUtil.trim(name);
-
+					name = matchNameToDB(name);
 					show.name = name;
 					show.episode 	= Number(RegExpLibrary.TV_EPISODE_NUMBER.exec(episode)[1]);
 					show.season 	= Number(RegExpLibrary.TV_SEASON_NUMBER.exec(season)[1]);
@@ -104,6 +103,51 @@ package core
 				}
 			}
 			return show;
+		}
+
+		private function matchNameToDB(name:String):String
+		{
+			var res:String = name;
+			if (m_showsDB)
+			{
+				var showNames:Array = m_showsDB.getShows();
+				if (showNames.indexOf(name)==-1)
+				{
+					var i			:int;
+					var j			:int;
+					var showName	:String;
+					// try matching initials if the name is multiword, or partial match for a single word show name
+					// (i.e. "Family Guy" will try to match "FG", "Dexter" will try to match "DEX")
+					for (i=0; i<showNames.length; i++)
+					{
+						showName = showNames[i];
+						var parts:Array = showName.split(" ");
+						if (parts.length>1)
+						{
+							// try initial matching
+							showName = "";
+							for (j=0; j<parts.length; j++)
+							{
+								showName += (parts[j] as String).charAt(0);
+							}
+							if (showName==name)
+							{
+								// matched initials
+								return showNames[i];
+							}
+						}
+						else
+						{
+							if (showName.toLowerCase().indexOf(name.toLowerCase())!=-1)
+							{
+								return showName;
+							}
+						}
+					}
+				}
+
+			}
+			return res;
 		}
 
 		public function generateNFO(show:Show, location:File):void

@@ -1,5 +1,7 @@
 package core
 {
+	import core.db.IShowsDB;
+	import core.db.ShowsDB;
 	import core.fileIO.AIRFileIO;
 	import core.fileIO.IFileIOObserver;
 	import core.mediaInfo.Show;
@@ -14,8 +16,14 @@ package core
 
 	public class MediaArrangerCore extends EventDispatcher
 	{
+		private var m_showsDB:IShowsDB;
+
 		public function MediaArrangerCore()
 		{
+			m_showsDB = new ShowsDB();
+			m_showsDB.init();
+			m_showsDB.addShow("test");
+			var res:Array = m_showsDB.getShows();
 		}
 
 		public function extractEpisodeInfo(fileName:String):Object

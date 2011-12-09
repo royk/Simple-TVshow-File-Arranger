@@ -44,9 +44,12 @@ package core
 					file = files[i] as File;
 					if (file.exists)
 					{
-						if (file.isDirectory && recursive==true)
+						if (file.isDirectory)
 						{
-							result = result.concat(crawlDirectory(file, recursive))
+							if (recursive==true)
+							{
+								result = result.concat(crawlDirectory(file, recursive))
+							}
 						}
 						else
 						{

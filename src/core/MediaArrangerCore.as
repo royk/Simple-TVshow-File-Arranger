@@ -57,7 +57,7 @@ package core
 			fileIO.move(filePath, toDirectoryPath, observer);
 		}
 
-		public function crawlDirectory(dir:File, recursive:Boolean):Vector.<String>
+		public function crawlDirectory(dir:File):Vector.<String>
 		{
 			var result	:Vector.<String> 	= new Vector.<String>();
 			var files	:Array;
@@ -74,9 +74,9 @@ package core
 					{
 						if (file.isDirectory)
 						{
-							if (recursive==true)
+							if (m_settings.recursiveScan)
 							{
-								result = result.concat(crawlDirectory(file, recursive))
+								result = result.concat(crawlDirectory(file))
 							}
 						}
 						else
@@ -114,7 +114,7 @@ package core
 					name = StringUtils.globalReplace(name, ".", " ");
 					name = StringUtils.capitalizeWords(name);
 					name = StringUtil.trim(name);
-					name = matchNameToDB(name, fileName, true);
+					name = matchNameToDB(name, fileName, m_settings.ignoreNewShows);
 					if (name)
 					{
 						show = new Show();
@@ -129,10 +129,10 @@ package core
 			return show;
 		}
 
-		private function matchNameToDB(name:String, fileName:String, failIfCantMatch:Boolean):String
+		private function matchNameToDB(name:String, fileName:String, ignoreNewShows:Boolean):String
 		{
 			var res:String = "";
-			if (failIfCantMatch==false)
+			if (ignoreNewShows==false)
 			{
 				res = name;
 			}

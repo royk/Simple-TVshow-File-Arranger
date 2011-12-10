@@ -29,19 +29,13 @@ package presenter
 		private var m_currentShow:Show;
 
 		private var m_file:File;
-		private var m_inputDir:String = "C:\\share\\tv";
 		private var m_mediaName:String;
 		private var m_season:String;
-		private var m_targetFolder:String;
 		private var m_currentFileName:String;
 		private var m_copyStatus:String;
 		private var m_scraperStatus:String;
-		private var m_targetBase:String = "c:\\shows";
+		private var m_targetPath:String = "";
 		private var m_scrape:Boolean = false;
-		private var m_recursiveScan:Boolean = true;
-
-		private var m_autoRun:Boolean = false;
-		private var m_processOnlyRecognizedShows:Boolean = false;
 
 		private var m_movementStack:ArrayList = new ArrayList();
 		private var m_copyInProgress:Boolean = false;
@@ -55,23 +49,18 @@ package presenter
 
 		public function set autoRun(value:Boolean):void
 		{
-			m_autoRun = value;
-		}
-
-		public function set processOnlyRecognizedShows(value:Boolean):void
-		{
-			m_processOnlyRecognizedShows = value;
+			m_core.settings.autoRun = value;
 		}
 
 		[Bindable]
 		public function get recursiveScan():Boolean
 		{
-			return m_recursiveScan;
+			return m_core.settings.recursiveScan;
 		}
 
 		public function set recursiveScan(value:Boolean):void
 		{
-			m_recursiveScan = value;
+			m_core.settings.recursiveScan = value;
 		}
 
 		[Bindable]
@@ -86,14 +75,14 @@ package presenter
 		}
 
 		[Bindable]
-		public function get targetBase():String
+		public function get targetPath():String
 		{
-			return m_targetBase;
+			return m_targetPath;
 		}
 
-		public function set targetBase(value:String):void
+		public function set targetPath(value:String):void
 		{
-			m_targetBase = value;
+			m_targetPath = value;
 			updateTargetName();
 		}
 
@@ -159,12 +148,12 @@ package presenter
 		[Bindable]
 		public function get inputDir():String
 		{
-			return m_inputDir;
+			return m_core.settings.inputDir;
 		}
 
 		public function set inputDir(value:String):void
 		{
-			m_inputDir = value;
+			m_core.settings.inputDir = value;
 		}
 
 		[Bindable]
@@ -193,20 +182,20 @@ package presenter
 		}
 
 		[Bindable]
-		public function get targetFolder():String
+		public function get outputDir():String
 		{
-			return m_targetFolder;
+			return m_core.settings.outputDir;
 		}
 
-		public function set targetFolder(value:String):void
+		public function set outputDir(value:String):void
 		{
-			m_targetFolder = value;
+			m_core.settings.outputDir = value;
 		}
 
 		private function crawlFiles():void
 		{
 			var dir:File = new File(inputDir);
-			m_files = m_core.crawlDirectory(dir, m_recursiveScan);
+			m_files = m_core.crawlDirectory(dir);
 		}
 
 		public function scanDirectory():void
@@ -291,10 +280,10 @@ package presenter
 
 		private function addFileToPendingList():void
 		{
-			if (file && targetFolder)
+			if (file && outputDir)
 			{
 				var moveFile:File = new File(file.nativePath);
-				var newLocation:File = new File(targetFolder);
+				var newLocation:File = new File(outputDir);
 				if (newLocation.exists==false)
 				{
 					if (scrape)
@@ -305,7 +294,7 @@ package presenter
 					}
 					pendingFiles.addItem({	file:moveFile,
 											location:newLocation,
-											pathBase:targetBase,
+											pathBase:outputDir,
 											show:m_currentShow});
 				}
 				else
@@ -349,7 +338,7 @@ package presenter
 
 		private function updateTargetName():void
 		{
-			targetFolder = getTargetName(m_currentShow);
+			outputDir = getTargetName(m_currentShow);
 		}
 
 		private function getTargetName(show:Show):String
@@ -359,7 +348,7 @@ package presenter
 
 		private function showBasePath(show:Show):String
 		{
-			return targetBase + "\\" + show.name;
+			return outputDir + "\\" + show.name;
 		}
 
 		private function applyModifiedShowName():void

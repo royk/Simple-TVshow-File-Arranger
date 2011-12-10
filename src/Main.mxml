@@ -32,13 +32,13 @@
 
 			protected function windowedapplication1_invokeHandler(event:InvokeEvent):void
 			{
-				var args:Array = new Array();
-				for each (var s:String in event.arguments)
-				{
-					args.push(s.toLowerCase());
-				}
-				m_presenter.autoRun = args.indexOf("autorun")!=-1;
-				m_presenter.processOnlyRecognizedShows = args.indexOf("knownonly")!=-1;
+//				var args:Array = new Array();
+//				for each (var s:String in event.arguments)
+//				{
+//					args.push(s.toLowerCase());
+//				}
+//				m_presenter.autoRun = args.indexOf("autorun")!=-1;
+//				m_presenter.processOnlyRecognizedShows = args.indexOf("knownonly")!=-1;
 			}
 
 		]]>
@@ -69,12 +69,12 @@
 			</s:HGroup>
 			<s:HGroup>
 				<s:Label text="Target path:"/>
-				<s:TextInput id="targetBase" text="@{m_presenter.targetBase}"/>
+				<s:TextInput id="targetBase" text="@{m_presenter.outputDir}"/>
 				<s:CheckBox label="Scrape" selected="@{m_presenter.scrape}"/>
 			</s:HGroup>
 			<s:HGroup height="53" width="221" right="0">
 				<s:Label text="Move to:" height="21"/>
-				<s:TextInput width="265" id="targetFolder" text="@{m_presenter.targetFolder}"/>
+				<s:TextInput width="265" id="targetFolder" text="@{m_presenter.targetPath}"/>
 			</s:HGroup>
 			<s:HGroup>
 				<s:Button label="Apply to selection" click="{m_presenter.applyChanges(pendingList.selectedItems); pendingList.dataGroup.invalidateDisplayList();}"/>

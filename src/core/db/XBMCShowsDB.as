@@ -30,7 +30,7 @@ package core.db
 		protected function generateShowNames():Array
 		{
 			var statement:SQLStatement;
-			var res:Array;
+			var res:Array = new Array();
 			if (m_inited)
 			{
 				statement = startStatement("SELECT * FROM tvshow");

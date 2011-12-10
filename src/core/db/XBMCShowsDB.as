@@ -6,16 +6,21 @@ package core.db
 
 	public class XBMCShowsDB extends ShowsSQLiteBase
 	{
-		private var m_showNames:Array;
+		private var m_showNames	:Array;
+		private var m_dbDir		:String;
 
-		public function XBMCShowsDB()
+		public function XBMCShowsDB(dbDir:String)
 		{
+			m_dbDir = dbDir;
 		}
 
 		override public function init():void
 		{
-			setDB(new File("C:\\Program Files\\XBMC\\userdata\\Database\\MyVideos34.db"));
-			super.init();
+			if (m_dbDir)
+			{
+				setDB(new File(m_dbDir));
+				super.init();
+			}
 		}
 
 		override public function addShow(name:String):void
@@ -26,16 +31,19 @@ package core.db
 		{
 			var statement:SQLStatement;
 			var res:Array;
-			statement = startStatement("SELECT * FROM tvshow");
-			try
+			if (m_inited)
 			{
-				statement.execute();
+				statement = startStatement("SELECT * FROM tvshow");
+				try
+				{
+					statement.execute();
+				}
+				catch(e:Error)
+				{
+					// query failed.
+				}
+				res = extractShowNames(statement.getResult().data);
 			}
-			catch(e:Error)
-			{
-				// query failed.
-			}
-			res = extractShowNames(statement.getResult().data);
 			return res;
 		}
 

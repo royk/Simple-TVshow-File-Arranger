@@ -7,6 +7,8 @@ package core
 	import core.fileIO.IFileIOObserver;
 	import core.mediaInfo.Show;
 	import core.scrapers.TheTVDBScraper;
+	import core.settings.Settings;
+	import core.settings.SettingsLoader;
 	import core.utils.StringUtils;
 
 	import flash.events.Event;
@@ -18,11 +20,30 @@ package core
 	public class MediaArrangerCore extends EventDispatcher
 	{
 		private var m_showsDB:IShowsDB;
+		private var m_settings:Settings;
 
 		public function MediaArrangerCore()
 		{
-			m_showsDB = new XBMCShowsDB();
+			loadSettings();
+			init();
+
+		}
+
+		public function loadSettings():void
+		{
+			m_settings = new SettingsLoader().load();
+
+		}
+
+		private function init():void
+		{
+			m_showsDB = new XBMCShowsDB(m_settings.xbmcDBDir);
 			m_showsDB.init();
+		}
+
+		public function get settings():Settings
+		{
+			return m_settings;
 		}
 
 		public function extractEpisodeInfo(fileName:String):Object

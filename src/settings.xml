@@ -1,0 +1,9 @@
+<!-- Simple TV Organizer 'Atom' version settings file -->
+<settings>
+	<inputDir>c:\\showtest\\</inputDir>
+	<outputDir>c:\\shows\\</outputDir>
+	<xbmcDBDir>c:\\</xbmcDBDir>
+	<recursiveScan>true</recursiveScan>
+	<ignoreNewShows>true</ignoreNewShows>
+	<autoRun>false</autoRun>
+</settings>

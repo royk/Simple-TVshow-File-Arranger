@@ -8,6 +8,7 @@ package core.db
 	{
 		protected var m_connection	:SQLConnection;
 		protected var m_dbFile		:File;
+		protected var m_inited		:Boolean = false;
 
 		public function ShowsSQLiteBase()
 		{
@@ -20,8 +21,20 @@ package core.db
 
 		public function init():void
 		{
-			m_connection = new SQLConnection();
-			m_connection.open(m_dbFile);
+			if (m_dbFile.exists && m_dbFile.isDirectory==false)
+			{
+				m_connection = new SQLConnection();
+				try
+				{
+					m_connection.open(m_dbFile);
+				}
+				catch(e:Error)
+				{
+					// handle db reading error
+					return;
+				}
+				m_inited = true;
+			}
 		}
 
 		protected function startStatement(text:String):SQLStatement

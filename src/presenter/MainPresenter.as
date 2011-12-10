@@ -47,9 +47,9 @@ package presenter
 		}
 
 
-		public function set autoRun(value:Boolean):void
+		public function get autoRun():Boolean
 		{
-			m_core.settings.autoRun = value;
+			return m_core.settings.autoRun;
 		}
 
 		[Bindable]
@@ -231,6 +231,11 @@ package presenter
 				(pendingFiles as ArrayList).removeItem(data);
 				m_core.moveFiles(data.file.nativePath, data.location.nativePath, this);
 			}
+			else
+			{
+				// moved all files
+				dispatchEvent(new Event(Event.COMPLETE));
+			}
 		}
 
 		// IFileIOObserver functions
@@ -283,7 +288,7 @@ package presenter
 			if (file && outputDir)
 			{
 				var moveFile:File = new File(file.nativePath);
-				var newLocation:File = new File(outputDir);
+				var newLocation:File = new File(targetPath);
 				if (newLocation.exists==false)
 				{
 					if (scrape)
@@ -338,7 +343,7 @@ package presenter
 
 		private function updateTargetName():void
 		{
-			outputDir = getTargetName(m_currentShow);
+			targetPath = getTargetName(m_currentShow);
 		}
 
 		private function getTargetName(show:Show):String

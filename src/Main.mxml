@@ -8,6 +8,8 @@
 
 	<fx:Script>
 		<![CDATA[
+			import flash.utils.setTimeout;
+
 			import mx.events.FlexEvent;
 			import mx.events.ItemClickEvent;
 
@@ -21,6 +23,20 @@
 			private function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
 			{
 				m_presenter = new MainPresenter(this);
+				m_presenter.addEventListener(Event.COMPLETE, onAllFilesMoved);
+				if (m_presenter.autoRun)
+				{
+					m_presenter.scanDirectory();
+					m_presenter.beginMove();
+				}
+			}
+
+			private function onAllFilesMoved(ev:Event):void
+			{
+				if (m_presenter.autoRun)
+				{
+					nativeApplication.exit();
+				}
 			}
 
 

@@ -35,6 +35,10 @@ package core.db
 				}
 				m_inited = true;
 			}
+			else
+			{
+				trace("SQLLite DB can't be loaded: File not found");
+			}
 		}
 
 		protected function startStatement(text:String):SQLStatement

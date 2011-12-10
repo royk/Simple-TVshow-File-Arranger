@@ -139,6 +139,11 @@ package core
 			if (m_showsDB)
 			{
 				var showNames:Array = m_showsDB.getShows();
+				if (showNames.length==0)
+				{
+					// db empty or not found - can't attempt to match, just return what we already have (to override ignoreNewShows)
+					return name;
+				}
 				if (showNames.indexOf(name)==-1)
 				{
 					var i			:int;

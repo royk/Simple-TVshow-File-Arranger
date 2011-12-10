@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
 					   xmlns:s="library://ns.adobe.com/flex/spark"
-					   xmlns:mx="library://ns.adobe.com/flex/mx" height="600" width="800" creationComplete="windowedapplication1_creationCompleteHandler(event)" implements="view.IMainView">
+					   xmlns:mx="library://ns.adobe.com/flex/mx" height="600" width="800"
+					   creationComplete="windowedapplication1_creationCompleteHandler(event)"
+					   invoke="windowedapplication1_invokeHandler(event)"
+					   implements="view.IMainView">
 
 	<fx:Script>
 		<![CDATA[
@@ -24,6 +27,18 @@
 			private function mediaType_itemClickHandler(event:ItemClickEvent):void
 			{
 				currentState = mediaType.selection.id;
+			}
+
+
+			protected function windowedapplication1_invokeHandler(event:InvokeEvent):void
+			{
+				var args:Array = new Array();
+				for each (var s:String in event.arguments)
+				{
+					args.push(s.toLowerCase());
+				}
+				m_presenter.autoRun = args.indexOf("autorun")!=-1;
+				m_presenter.processOnlyRecognizedShows = args.indexOf("knownonly")!=-1;
 			}
 
 		]]>

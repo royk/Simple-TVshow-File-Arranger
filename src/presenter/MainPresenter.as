@@ -40,6 +40,9 @@ package presenter
 		private var m_scrape:Boolean = false;
 		private var m_recursiveScan:Boolean = true;
 
+		private var m_autoRun:Boolean = false;
+		private var m_processOnlyRecognizedShows:Boolean = false;
+
 		private var m_movementStack:ArrayList = new ArrayList();
 		private var m_copyInProgress:Boolean = false;
 		private var m_files	:Vector.<String>;
@@ -49,6 +52,16 @@ package presenter
 			m_view = view;
 		}
 
+
+		public function set autoRun(value:Boolean):void
+		{
+			m_autoRun = value;
+		}
+
+		public function set processOnlyRecognizedShows(value:Boolean):void
+		{
+			m_processOnlyRecognizedShows = value;
+		}
 
 		[Bindable]
 		public function get recursiveScan():Boolean

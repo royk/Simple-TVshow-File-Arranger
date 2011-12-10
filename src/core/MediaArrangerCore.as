@@ -74,8 +74,6 @@ package core
 			var showNameRegex:Object = RegExpLibrary.TV_SHOW_NAME.exec(fileName);
 			if (showNameRegex)
 			{
-				show = new Show();
-				show.fileName = fileName;
 				if (episodeInfo.length>2)
 				{
 					var season:String 	= episodeInfo[1];
@@ -95,19 +93,28 @@ package core
 					name = StringUtils.globalReplace(name, ".", " ");
 					name = StringUtils.capitalizeWords(name);
 					name = StringUtil.trim(name);
-					name = matchNameToDB(name, fileName);
-					show.name = name;
-					show.episode 	= Number(RegExpLibrary.TV_EPISODE_NUMBER.exec(episode)[1]);
-					show.season 	= Number(RegExpLibrary.TV_SEASON_NUMBER.exec(season)[1]);
+					name = matchNameToDB(name, fileName, true);
+					if (name)
+					{
+						show = new Show();
+						show.fileName 	= fileName;
+						show.name 		= name;
+						show.episode 	= Number(RegExpLibrary.TV_EPISODE_NUMBER.exec(episode)[1]);
+						show.season 	= Number(RegExpLibrary.TV_SEASON_NUMBER.exec(season)[1]);
+					}
 
 				}
 			}
 			return show;
 		}
 
-		private function matchNameToDB(name:String, fileName:String):String
+		private function matchNameToDB(name:String, fileName:String, failIfCantMatch:Boolean):String
 		{
-			var res:String = name;
+			var res:String = "";
+			if (failIfCantMatch==false)
+			{
+				res = name;
+			}
 			if (m_showsDB)
 			{
 				var showNames:Array = m_showsDB.getShows();
@@ -157,6 +164,11 @@ package core
 							}
 						}
 					}
+				}
+				else
+				{
+					// if show name is an exact match to what's stored
+					res = name;
 				}
 
 			}

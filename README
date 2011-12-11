@@ -1,20 +1,23 @@
 Simple TVshow File Arrnager (STFA)
 
-The main goal of STFA is to arrange your tv show files under a conventional structure with as little input from you as possible.
+Still in development (pre alpha)
+
+The main goal of STFA is to arrange your tv show files under a conventional structure with as little input from you as possible. Its secondary goal is to snuggly fit within a flow of an automated Media Center.
 
 Some of the main features of STFA:
 > Smart algorithm that can correctly guess the TV show's name and seasons from many types of file names.
 > Can use XBMC to improve the guesswork
-> Manual mode allows to correct the guess
+> Manual mode allows to easily correct bad guesses
 > Guess corrections are stored to improve future guesses (TBD)
 > Auto mode requires no user input at all
 > When connected to XBMC, can ignore shows that are not listed in your Database.
 > Completely configurable via command line arguments for auto execution (TBD)
-
+> Ouputs an XML log file for both human and machine readability (TBD)
+> Exclusive use of AIR API for cross platform support (not yet verified)
 
 Architecture
 
-The UI is separated to Viewer and Presenter, with two way binding instead of a Data module.
+The UI is separated to Viewer and Presenter, where the Viewer contains only UI info, and the presenter contains the logic that's connected directly to the UI.
 
 The Presenter utilizes classes from the core package that perform decoupled business logic tasks.
 

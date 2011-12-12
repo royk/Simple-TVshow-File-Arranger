@@ -7,7 +7,7 @@ The main goal of STFA is to arrange your tv show files under a conventional fold
 Some of the main features of STFA:
 > Smart algorithm that can correctly guess the TV show's name and seasons from many types of file name formats.
 > Can use XBMC to improve the guesswork
-> Manual mode allows to easily correct bad guesses
+> Manual mode allows easy correction of bad guesses
 > Guess corrections are stored to improve future guesses (TBD)
 > Auto mode requires no user input at all
 > When connected to XBMC, can ignore shows that are not listed in your Database.

@@ -46,9 +46,9 @@ package core.settings
 			settings = new Settings();
 			try
 			{
-				settings.inputDir 	= xml.inputDir[0].text();
-				settings.outputDir 	= xml.outputDir[0].text();
-				settings.xbmcDB	= xml.xbmcDBDir[0].text();
+				settings.inputDir 		= xml.inputDir[0].text();
+				settings.outputDir 		= xml.outputDir[0].text();
+				settings.xbmcDB			= xml.xbmcDB[0].text();
 				settings.recursiveScan  = xml.recursiveScan[0].text().toLowerCase()=="true";
 				settings.ignoreNewShows	= xml.ignoreNewShows[0].text().toLowerCase()=="true";
 				settings.autoRun		= xml.autoRun[0].text().toLowerCase()=="true";

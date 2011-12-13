@@ -31,7 +31,7 @@ package presenter
 		private var m_mediaName:String;
 		private var m_season:String;
 		private var m_currentFileName:String;
-		private var m_log:String;
+		private var m_log:String = "";
 		private var m_targetPath:String = "";
 
 		private var m_movementStack:ArrayList = new ArrayList();
@@ -221,9 +221,14 @@ package presenter
 			for (var i:int=0; i<m_files.length; i++)
 			{
 				file = new File(m_files[i]);
+				writeLog("Processing "+file.name);
 				if (process())
 				{
 					addFileToPendingList();
+				}
+				else
+				{
+					writeLog("\tFile name doesn't contain show info. Skipping");
 				}
 			}
 		}
@@ -234,11 +239,13 @@ package presenter
 			{
 				var data:Object = pendingFiles.getItemAt(0);
 				(pendingFiles as ArrayList).removeItem(data);
+				writeLog("Moving "+data.file.name);
 				m_core.moveFiles(data.file.nativePath, data.location.nativePath, this);
 			}
 			else
 			{
 				// moved all files
+				writeLog("Done");
 				dispatchEvent(new Event(Event.COMPLETE));
 			}
 		}
@@ -246,13 +253,13 @@ package presenter
 		// IFileIOObserver functions
 		public function moveSuccess():void
 		{
-			writeLog("Move succeeded");
+			writeLog("\tMove succeeded");
 			beginMove();
 		}
 
 		public function moveError(failedFile:String, reason:String):void
 		{
-			writeLog("Failed moving: "+failedFile+". "+reason);
+			writeLog("\tFailed moving: "+failedFile+". "+reason);
 			beginMove();
 		}
 		// END IFileIOObserver functions
@@ -303,7 +310,7 @@ package presenter
 				}
 				else
 				{
-					writeLog("File already exists, skipping");
+					writeLog("\tFile already exists at target path, skipping");
 				}
 			}
 		}

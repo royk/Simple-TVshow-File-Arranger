@@ -5,5 +5,5 @@
 	<xbmcDB>c:\MyVideos35.db</xbmcDB>
 	<recursiveScan>true</recursiveScan>
 	<ignoreNewShows>true</ignoreNewShows>
-	<autoRun>true</autoRun>
+	<autoRun>false</autoRun>
 </settings>

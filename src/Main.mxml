@@ -15,6 +15,8 @@
 
 			import presenter.MainPresenter;
 
+			import spark.events.TextOperationEvent;
+
 			import view.IMainView;
 			import view.MainViewPendingRenderer;
 			[Bindable]
@@ -46,6 +48,18 @@
 				// Real application starting point is here.
 				m_presenter.parseSettings(event.arguments);
 				m_presenter.init();
+			}
+
+
+			protected function log_valueCommitHandler(event:FlexEvent):void
+			{
+				log.addEventListener(Event.ENTER_FRAME, updateLogScroll);
+			}
+
+			private function updateLogScroll(ev:Event):void
+			{
+				log.removeEventListener(Event.ENTER_FRAME, updateLogScroll);
+				log.scroller.verticalScrollBar.value = log.scroller.verticalScrollBar.maximum;
 			}
 
 		]]>
@@ -90,7 +104,7 @@
 			</s:VGroup>
 			<mx:Spacer height="20"/>
 			<s:Button label="Move!" click="{m_presenter.beginMove();}"/>
-			<s:TextArea id="log" text="{m_presenter.log}" editable="false" width="100%" height="100%"/>
+			<s:TextArea id="log" text="{m_presenter.log}" editable="false" width="100%" height="100%" valueCommit="log_valueCommitHandler(event)"/>
 		</s:VGroup>
 		<mx:Spacer width="20"/>
 		<s:List id="pendingList" dataProvider="{m_presenter.pendingFiles}" change="{m_presenter.modifyFiles(pendingList.selectedItems)}" bottom="10" right="10" width="100%" height="100%" allowMultipleSelection="true" itemRenderer="view.MainViewPendingRenderer">

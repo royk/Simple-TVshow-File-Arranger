@@ -31,7 +31,7 @@ package presenter
 		private var m_mediaName:String;
 		private var m_season:String;
 		private var m_currentFileName:String;
-		private var m_copyStatus:String;
+		private var m_log:String;
 		private var m_targetPath:String = "";
 
 		private var m_movementStack:ArrayList = new ArrayList();
@@ -94,14 +94,14 @@ package presenter
 		}
 
 		[Bindable]
-		public function get copyStatus():String
+		public function get log():String
 		{
-			return m_copyStatus;
+			return m_log;
 		}
 
-		public function set copyStatus(value:String):void
+		public function set log(value:String):void
 		{
-			m_copyStatus = value;
+			m_log = value;
 		}
 
 		[Bindable]
@@ -246,13 +246,13 @@ package presenter
 		// IFileIOObserver functions
 		public function moveSuccess():void
 		{
-			copyStatus = "Move succeeded";
+			writeLog("Move succeeded");
 			beginMove();
 		}
 
 		public function moveError(failedFile:String, reason:String):void
 		{
-			copyStatus = "Failed moving: "+failedFile+". "+reason;
+			writeLog("Failed moving: "+failedFile+". "+reason);
 			beginMove();
 		}
 		// END IFileIOObserver functions
@@ -303,9 +303,15 @@ package presenter
 				}
 				else
 				{
-					copyStatus = "File already exists, skipping";
+					writeLog("File already exists, skipping");
 				}
 			}
+		}
+
+		private function writeLog(value:String):void
+		{
+			log += value;
+			log += "\n";
 		}
 
 		private function process():Boolean

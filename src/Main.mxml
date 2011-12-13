@@ -53,7 +53,10 @@
 
 			protected function log_valueCommitHandler(event:FlexEvent):void
 			{
-				log.addEventListener(Event.ENTER_FRAME, updateLogScroll);
+				if (log.hasEventListener(Event.ENTER_FRAME)==false)
+				{
+					log.addEventListener(Event.ENTER_FRAME, updateLogScroll);
+				}
 			}
 
 			private function updateLogScroll(ev:Event):void

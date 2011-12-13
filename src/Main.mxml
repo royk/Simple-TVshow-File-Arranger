@@ -10,11 +10,13 @@
 		<![CDATA[
 			import flash.utils.setTimeout;
 
+			import mx.core.UIComponent;
 			import mx.events.FlexEvent;
 			import mx.events.ItemClickEvent;
 
 			import presenter.MainPresenter;
 
+			import spark.components.RichEditableText;
 			import spark.events.TextOperationEvent;
 
 			import view.IMainView;
@@ -30,7 +32,7 @@
 
 			private function onAllFilesMoved(ev:Event):void
 			{
-				if (m_presenter.autoRun)
+				if (m_presenter.settings.autoRun)
 				{
 					nativeApplication.exit();
 				}
@@ -48,6 +50,26 @@
 				// Real application starting point is here.
 				m_presenter.parseSettings(event.arguments);
 				m_presenter.init();
+				invalidateData(this);
+			}
+
+			private function invalidateData(root:UIComponent):void
+			{
+				if (root)
+				{
+					if (root is RichEditableText)
+					{
+						root.dispatchEvent(new TextOperationEvent(TextOperationEvent.CHANGE));
+					}
+					else if (root is TextInput)
+					{
+						root.dispatchEvent(new Event(Event.CHANGE));
+					}
+					for (var i:int=0; i<root.numChildren; i++)
+					{
+						invalidateData(root.getChildAt(i) as UIComponent);
+					}
+				}
 			}
 
 
@@ -92,13 +114,13 @@
 					<s:Label height="21" text="Season:"/>
 					<s:TextInput width="150" id="seasonInput" text="@{m_presenter.season}"/>
 				</s:HGroup>
-				<s:HGroup>
-					<s:Label text="Target path:"/>
-					<s:TextInput id="targetBase" text="@{m_presenter.outputDir}"/>
-				</s:HGroup>
 				<s:HGroup height="53" width="221" right="0">
 					<s:Label text="Move to:" height="21"/>
 					<s:TextInput width="265" id="targetFolder" text="@{m_presenter.targetPath}"/>
+				</s:HGroup>
+				<s:HGroup>
+					<s:Label text="Target path:"/>
+					<s:TextInput id="targetBase" text="@{m_presenter.settings.outputDir}"/>
 				</s:HGroup>
 				<s:HGroup>
 					<s:Button label="Apply to selection" click="{m_presenter.applyChanges(pendingList.selectedItems); pendingList.dataGroup.invalidateDisplayList();}"/>

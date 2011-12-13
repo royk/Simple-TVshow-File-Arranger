@@ -1,6 +1,9 @@
 package core.settings
 {
-	public class Settings
+	import flash.events.EventDispatcher;
+
+	[Bindable]
+	public class Settings extends EventDispatcher
 	{
 		public var inputDir			:String = "";
 		public var outputDir		:String = "";

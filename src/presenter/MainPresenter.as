@@ -3,6 +3,7 @@ package presenter
 	import core.MediaArrangerCore;
 	import core.fileIO.IFileIOObserver;
 	import core.mediaInfo.Show;
+	import core.settings.Settings;
 
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -46,18 +47,18 @@ package presenter
 		public function init():void
 		{
 			m_core.init();
-			if (autoRun)
+			if (settings.autoRun)
 			{
 				scanDirectory();
 				beginMove();
 			}
 		}
-
-
-		public function get autoRun():Boolean
+		
+		public function get settings():Settings
 		{
-			return m_core.settings.autoRun;
+			return m_core.settings;
 		}
+
 
 		[Bindable]
 		public function get recursiveScan():Boolean
@@ -164,17 +165,6 @@ package presenter
 		{
 			m_season = value;
 			updateTargetName();
-		}
-
-		[Bindable]
-		public function get outputDir():String
-		{
-			return m_core.settings.outputDir;
-		}
-
-		public function set outputDir(value:String):void
-		{
-			m_core.settings.outputDir = value;
 		}
 
 		private function crawlFiles():void
@@ -297,7 +287,7 @@ package presenter
 
 		private function addFileToPendingList():void
 		{
-			if (file && outputDir)
+			if (file && settings.outputDir)
 			{
 				var moveFile:File = new File(file.nativePath);
 				var newLocation:File = new File(targetPath);
@@ -305,7 +295,7 @@ package presenter
 				{
 					pendingFiles.addItem({	file:moveFile,
 											location:newLocation,
-											pathBase:outputDir,
+											pathBase:settings.outputDir,
 											show:m_currentShow});
 				}
 				else
@@ -359,7 +349,7 @@ package presenter
 
 		private function showBasePath(show:Show):String
 		{
-			return outputDir + "\\" + show.name;
+			return settings.outputDir + "\\" + show.name;
 		}
 
 		private function applyModifiedShowName():void

@@ -27,9 +27,14 @@ package core
 
 		public function init():void
 		{
-			m_settings = new SettingsLoader().load();
+			settings = new SettingsLoader().load();
 			m_showsDB = new XBMCShowsDB(m_settings.xbmcDB);
 			m_showsDB.init();
+		}
+		[Bindable]
+		public function set settings(value:Settings):void
+		{
+			m_settings = value;
 		}
 
 		public function get settings():Settings

@@ -98,7 +98,6 @@ package core
 					var season:String 	= episodeInfo[1];
 					var episode:String 	= episodeInfo[2];
 					var name:String 	= fileName.substr(0, fileName.indexOf(episodeInfo[0]));	// just default value, in case regex fails
-
 					if (showNameRegex)
 					{
 						var extraInfoIndex:int = fileName.indexOf(showNameRegex[0]);
@@ -110,6 +109,7 @@ package core
 					}
 					name = StringUtils.globalReplace(name, "_", " ");
 					name = StringUtils.globalReplace(name, ".", " ");
+					name = name.replace(RegExpLibrary.NAME_SEPARATOR, "");
 					name = StringUtils.capitalizeWords(name);
 					name = StringUtil.trim(name);
 					name = matchNameToDB(name, fileName, m_settings.ignoreNewShows);

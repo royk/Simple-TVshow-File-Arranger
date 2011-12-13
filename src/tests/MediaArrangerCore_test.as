@@ -72,6 +72,18 @@ package tests
 		}
 
 		[Test]
+		public function testProcessShow_good_input_4():void
+		{
+			var fileName:String = "Family_Guy_-_S01E02.avi";
+			var episodeInfo:Array = ["_S0101", "S01","E02"];
+			var result:Show = m_core.processShow(fileName, episodeInfo);
+
+			assertTrue(result.name=="Family Guy");
+			assertTrue(result.season==1);
+			assertTrue(result.episode==2);
+		}
+
+		[Test]
 		public function testProcessShow_no_name():void
 		{
 			var fileName:String = "1x18 - Home Soil.avi";

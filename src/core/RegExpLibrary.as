@@ -10,6 +10,7 @@ package core
 		static public const TV_SEASON_NUMBER:RegExp 	= /s?0?(\d+)/i;
 
 		// General Purpose
+		static public const NAME_SEPARATOR:RegExp	= /\s*[-]\s*$/;
 		static public const WHITE_SPACE_TRIM:RegExp	= /[ \t]+$/gi;
 	}
 }

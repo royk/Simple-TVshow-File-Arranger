@@ -2,7 +2,7 @@
 <settings>
 	<inputDir>c:\showtest</inputDir>
 	<outputDir>c:\shows</outputDir>
-	<xbmcDBDir>c:\MyVideos34.db</xbmcDBDir>
+	<xbmcDB>c:\MyVideos35.db</xbmcDB>
 	<recursiveScan>true</recursiveScan>
 	<ignoreNewShows>true</ignoreNewShows>
 	<autoRun>true</autoRun>

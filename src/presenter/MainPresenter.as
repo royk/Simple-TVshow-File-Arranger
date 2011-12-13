@@ -46,6 +46,16 @@ package presenter
 			m_view = view;
 		}
 
+		public function init():void
+		{
+			m_core.init();
+			if (autoRun)
+			{
+				scanDirectory();
+				beginMove();
+			}
+		}
+
 
 		public function get autoRun():Boolean
 		{
@@ -196,6 +206,26 @@ package presenter
 		{
 			var dir:File = new File(inputDir);
 			m_files = m_core.crawlDirectory(dir);
+		}
+
+		public function parseSettings(args:Array):void
+		{
+			var pair:Array;
+			for each (var s:String in args)
+			{
+				pair = s.split("=");
+				if (pair.length>1 && m_core.settings.hasOwnProperty(pair[0]))
+				{
+					if (m_core.settings[pair[0]] is Boolean)
+					{
+						m_core.settings[pair[0]] = pair[1]=="true";
+					}
+					else
+					{
+						m_core.settings[pair[0]] = pair[1];
+					}
+				}
+			}
 		}
 
 		public function scanDirectory():void

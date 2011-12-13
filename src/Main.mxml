@@ -24,11 +24,6 @@
 			{
 				m_presenter = new MainPresenter(this);
 				m_presenter.addEventListener(Event.COMPLETE, onAllFilesMoved);
-				if (m_presenter.autoRun)
-				{
-					m_presenter.scanDirectory();
-					m_presenter.beginMove();
-				}
 			}
 
 			private function onAllFilesMoved(ev:Event):void
@@ -48,13 +43,9 @@
 
 			protected function windowedapplication1_invokeHandler(event:InvokeEvent):void
 			{
-//				var args:Array = new Array();
-//				for each (var s:String in event.arguments)
-//				{
-//					args.push(s.toLowerCase());
-//				}
-//				m_presenter.autoRun = args.indexOf("autorun")!=-1;
-//				m_presenter.processOnlyRecognizedShows = args.indexOf("knownonly")!=-1;
+				// Real application starting point is here.
+				m_presenter.parseSettings(event.arguments);
+				m_presenter.init();
 			}
 
 		]]>

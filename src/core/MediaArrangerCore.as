@@ -25,8 +25,6 @@ package core
 		public function MediaArrangerCore()
 		{
 			loadSettings();
-			init();
-
 		}
 
 		public function loadSettings():void
@@ -35,9 +33,9 @@ package core
 
 		}
 
-		private function init():void
+		public function init():void
 		{
-			m_showsDB = new XBMCShowsDB(m_settings.xbmcDBDir);
+			m_showsDB = new XBMCShowsDB(m_settings.xbmcDB);
 			m_showsDB.init();
 		}
 

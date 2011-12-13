@@ -121,7 +121,6 @@ package core
 						show.episode 	= Number(RegExpLibrary.TV_EPISODE_NUMBER.exec(episode)[1]);
 						show.season 	= Number(RegExpLibrary.TV_SEASON_NUMBER.exec(season)[1]);
 					}
-
 				}
 			}
 			return show;

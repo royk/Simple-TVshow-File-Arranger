@@ -77,7 +77,6 @@
 			<s:HGroup>
 				<s:Label text="Target path:"/>
 				<s:TextInput id="targetBase" text="@{m_presenter.outputDir}"/>
-				<s:CheckBox label="Scrape" selected="@{m_presenter.scrape}"/>
 			</s:HGroup>
 			<s:HGroup height="53" width="221" right="0">
 				<s:Label text="Move to:" height="21"/>
@@ -88,7 +87,6 @@
 				<s:Button label="Delete selection" click="{m_presenter.removeFromPendingList(pendingList.selectedItems);pendingList.dataGroup.invalidateDisplayList();}"/>
 			</s:HGroup>
 			<s:Label id="copyStatus" text="{m_presenter.copyStatus}"/>
-			<s:Label id="scraperStatus" text="{m_presenter.scraperStatus}"/>
 			<s:Button label="Move!" click="{m_presenter.beginMove();}"/>
 		</s:VGroup>
 		<mx:Spacer width="20"/>

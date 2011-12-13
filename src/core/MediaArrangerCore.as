@@ -6,7 +6,6 @@ package core
 	import core.fileIO.AIRFileIO;
 	import core.fileIO.IFileIOObserver;
 	import core.mediaInfo.Show;
-	import core.scrapers.TheTVDBScraper;
 	import core.settings.Settings;
 	import core.settings.SettingsLoader;
 	import core.utils.StringUtils;
@@ -198,30 +197,5 @@ package core
 			return res;
 		}
 
-		public function generateNFO(show:Show, location:File):void
-		{
-			var scraping:Boolean = false;
-			if (location.exists && location.isDirectory)
-			{
-				var nfo:File = new File(location.nativePath+"\\tvshow.nfo");
-				if (nfo.exists==false)
-				{
-					var scraper:TheTVDBScraper = new TheTVDBScraper();
-					scraper.addEventListener(Event.COMPLETE, onScrapingComplete);
-					scraper.generateNFO(show.name, nfo);
-					scraping = true;
-				}
-			}
-			if (scraping==false)
-			{
-				dispatchEvent(new Event(Event.COMPLETE));
-			}
-		}
-
-		private function onScrapingComplete(ev:Event):void
-		{
-			var scraper:TheTVDBScraper = ev.target as TheTVDBScraper;
-			dispatchEvent(ev);
-		}
 	}
 }

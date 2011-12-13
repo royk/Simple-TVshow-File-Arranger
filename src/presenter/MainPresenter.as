@@ -3,7 +3,6 @@ package presenter
 	import core.MediaArrangerCore;
 	import core.fileIO.IFileIOObserver;
 	import core.mediaInfo.Show;
-	import core.scrapers.TheTVDBScraper;
 
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -33,9 +32,7 @@ package presenter
 		private var m_season:String;
 		private var m_currentFileName:String;
 		private var m_copyStatus:String;
-		private var m_scraperStatus:String;
 		private var m_targetPath:String = "";
-		private var m_scrape:Boolean = false;
 
 		private var m_movementStack:ArrayList = new ArrayList();
 		private var m_copyInProgress:Boolean = false;
@@ -94,28 +91,6 @@ package presenter
 		{
 			m_targetPath = value;
 			updateTargetName();
-		}
-
-		[Bindable]
-		public function get scrape():Boolean
-		{
-			return m_scrape;
-		}
-
-		public function set scrape(value:Boolean):void
-		{
-			m_scrape = value;
-		}
-
-		[Bindable]
-		public function get scraperStatus():String
-		{
-			return m_scraperStatus;
-		}
-
-		public function set scraperStatus(value:String):void
-		{
-			m_scraperStatus = value;
 		}
 
 		[Bindable]
@@ -321,12 +296,6 @@ package presenter
 				var newLocation:File = new File(targetPath);
 				if (newLocation.exists==false)
 				{
-					if (scrape)
-					{
-						scraperStatus = "Scraping "+m_currentShow.name;
-						m_core.addEventListener(Event.COMPLETE, onScrapingDone);
-						m_core.generateNFO(m_currentShow, new File(showBasePath(m_currentShow)));
-					}
 					pendingFiles.addItem({	file:moveFile,
 											location:newLocation,
 											pathBase:outputDir,
@@ -337,12 +306,6 @@ package presenter
 					copyStatus = "File already exists, skipping";
 				}
 			}
-		}
-
-		private function onScrapingDone(ev:Event):void
-		{
-			scraperStatus = "Scraping done.";
-			m_core.removeEventListener(Event.COMPLETE, onScrapingDone);
 		}
 
 		private function process():Boolean

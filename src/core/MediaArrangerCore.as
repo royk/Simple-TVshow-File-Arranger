@@ -23,17 +23,11 @@ package core
 
 		public function MediaArrangerCore()
 		{
-			loadSettings();
-		}
-
-		public function loadSettings():void
-		{
-			m_settings = new SettingsLoader().load();
-
 		}
 
 		public function init():void
 		{
+			m_settings = new SettingsLoader().load();
 			m_showsDB = new XBMCShowsDB(m_settings.xbmcDB);
 			m_showsDB.init();
 		}
@@ -111,7 +105,24 @@ package core
 					name = name.replace(RegExpLibrary.NAME_SEPARATOR, "");
 					name = StringUtils.capitalizeWords(name);
 					name = StringUtil.trim(name);
-					name = matchNameToDB(name, fileName, m_settings.ignoreNewShows);
+					var dbMatch:String = "";
+					dbMatch = matchNameToDB(name, fileName);
+					if (dbMatch=="")
+					{
+						name = "The "+name;
+						dbMatch = matchNameToDB(name, fileName);
+					}
+					if (dbMatch=="")
+					{
+						if (m_settings.ignoreNewShows)
+						{
+							name = "";
+						}
+					}
+					else
+					{
+						name = dbMatch;
+					}
 					if (name)
 					{
 						show = new Show();
@@ -125,74 +136,71 @@ package core
 			return show;
 		}
 
-		private function matchNameToDB(name:String, fileName:String, ignoreNewShows:Boolean):String
+		private function matchNameToDB(name:String, fileName:String):String
 		{
 			var res:String = "";
-			if (ignoreNewShows==false)
+			if (m_showsDB==null)
 			{
-				res = name;
+				// db doesn't exist - can't attempt to match. return name to pretend we had a match.
+				return name;
 			}
-			if (m_showsDB)
+			var showNames:Array = m_showsDB.getShows();
+			if (showNames.length==0)
 			{
-				var showNames:Array = m_showsDB.getShows();
-				if (showNames.length==0)
+				// db empty or not found - can't attempt to match.
+				return name;
+			}
+			if (showNames.indexOf(name)==-1)
+			{
+				var i			:int;
+				var j			:int;
+				var showName	:String;
+				// try matching initials if the name is multiword, or partial match for a single word show name
+				// (i.e. "Family Guy" will try to match "FG", "Dexter" will try to match "DEX")
+				for (i=0; i<showNames.length; i++)
 				{
-					// db empty or not found - can't attempt to match, just return what we already have (to override ignoreNewShows)
-					return name;
-				}
-				if (showNames.indexOf(name)==-1)
-				{
-					var i			:int;
-					var j			:int;
-					var showName	:String;
-					// try matching initials if the name is multiword, or partial match for a single word show name
-					// (i.e. "Family Guy" will try to match "FG", "Dexter" will try to match "DEX")
-					for (i=0; i<showNames.length; i++)
+					showName = showNames[i];
+					var parts:Array = showName.split(" ");
+					if (parts.length>1)
 					{
-						showName = showNames[i];
-						var parts:Array = showName.split(" ");
-						if (parts.length>1)
+						// try initial matching
+						showName = "";
+						for (j=0; j<parts.length; j++)
 						{
-							// try initial matching
-							showName = "";
-							for (j=0; j<parts.length; j++)
-							{
-								showName += (parts[j] as String).charAt(0);
-							}
-							if (showName==name)
-							{
-								// matched initials
-								return showNames[i];
-							}
+							showName += (parts[j] as String).charAt(0);
 						}
-						else
+						if (showName==name)
 						{
-							if (showName.toLowerCase().indexOf(name.toLowerCase())!=-1)
+							// matched initials
+							return showNames[i];
+						}
+					}
+					else
+					{
+						if (showName.toLowerCase().indexOf(name.toLowerCase())!=-1)
+						{
+							// matched shortened show name
+							return showName;
+						}
+						var origNameParts:Array = name.split(" ");
+						if (origNameParts.length>parts.length)
+						{
+							for each(var innerWord:String in origNameParts)
 							{
-								// matched shortened show name
-								return showName;
-							}
-							var origNameParts:Array = name.split(" ");
-							if (origNameParts.length>parts.length)
-							{
-								for each(var innerWord:String in origNameParts)
+								if (showName.toLowerCase()==innerWord.toLowerCase())
 								{
-									if (showName.toLowerCase()==innerWord.toLowerCase())
-									{
-										// match original name contains the show name within it
-										return showName;
-									}
+									// match original name contains the show name within it
+									return showName;
 								}
 							}
 						}
 					}
 				}
-				else
-				{
-					// if show name is an exact match to what's stored
-					res = name;
-				}
-
+			}
+			else
+			{
+				// if show name is an exact match to what's stored
+				res = name;
 			}
 			return res;
 		}

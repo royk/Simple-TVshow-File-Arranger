@@ -2,11 +2,11 @@ package core.settings
 {
 	public class Settings
 	{
-		public var inputDir			:String;
-		public var outputDir		:String;
-		public var xbmcDB			:String;
-		public var recursiveScan	:Boolean;
-		public var autoRun			:Boolean;
-		public var ignoreNewShows	:Boolean;
+		public var inputDir			:String = "";
+		public var outputDir		:String = "";
+		public var xbmcDB			:String = "";
+		public var recursiveScan	:Boolean = false;
+		public var autoRun			:Boolean = false;
+		public var ignoreNewShows	:Boolean = false;
 	}
 }

@@ -12,9 +12,9 @@ Some of the main features of STFA:
 > Guess corrections are stored to improve future guesses (TBD)
 > Auto mode requires no user input at all
 > When connected to XBMC, can ignore shows that are not listed in your Database.
-> Completely configurable via command line arguments for auto execution (TBD)
+> Completely configurable via command line arguments for auto execution
 > Ouputs an XML log file for both human and machine readability (TBD)
-> AIR technology utilized for cross platform support - Windows, OSX, Linux (not yet verified)
+> AIR technology utilized for cross platform support - Windows, OSX, Linux (TBD)
 > Best of all - 100% Open Source!
 
 Architecture

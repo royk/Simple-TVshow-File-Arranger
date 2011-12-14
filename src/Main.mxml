@@ -21,8 +21,10 @@
 
 			import view.IMainView;
 			import view.MainViewPendingRenderer;
+			import view.utils.ViewUtils;
 			[Bindable]
 			private var m_presenter:MainPresenter;
+			private var m_utils:ViewUtils = new ViewUtils();
 
 			private function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
 			{
@@ -50,41 +52,12 @@
 				// Real application starting point is here.
 				m_presenter.parseSettings(event.arguments);
 				m_presenter.init();
-				invalidateData(this);
+				m_utils.triggerTextBindings(this);
 			}
-
-			private function invalidateData(root:UIComponent):void
-			{
-				if (root)
-				{
-					if (root is RichEditableText)
-					{
-						root.dispatchEvent(new TextOperationEvent(TextOperationEvent.CHANGE));
-					}
-					else if (root is TextInput)
-					{
-						root.dispatchEvent(new Event(Event.CHANGE));
-					}
-					for (var i:int=0; i<root.numChildren; i++)
-					{
-						invalidateData(root.getChildAt(i) as UIComponent);
-					}
-				}
-			}
-
 
 			protected function log_valueCommitHandler(event:FlexEvent):void
 			{
-				if (log.hasEventListener(Event.ENTER_FRAME)==false)
-				{
-					log.addEventListener(Event.ENTER_FRAME, updateLogScroll);
-				}
-			}
-
-			private function updateLogScroll(ev:Event):void
-			{
-				log.removeEventListener(Event.ENTER_FRAME, updateLogScroll);
-				log.scroller.verticalScrollBar.value = log.scroller.verticalScrollBar.maximum;
+				m_utils.scrollToBottom(log);
 			}
 
 		]]>

@@ -4,7 +4,9 @@ package view.utils
 
 	import mx.controls.TextInput;
 	import mx.core.UIComponent;
+	import mx.events.PropertyChangeEvent;
 
+	import spark.components.CheckBox;
 	import spark.components.RichEditableText;
 	import spark.components.TextArea;
 	import spark.events.TextOperationEvent;
@@ -15,10 +17,10 @@ package view.utils
 	public class ViewUtils
 	{
 		/**
-		 * Causes all textfields under root to rebind by pretending they're changed
-		 * @root the base DisplayObject that is the direct or indirect parent of all the textfields you wish to rebind
+		 * Causes all components under root to rebind by pretending they're changed
+		 * @root the base DisplayObject that is the direct or indirect parent of all the components you wish to rebind
 		 */
-		public function triggerTextBindings(root:UIComponent):void
+		public function triggerComponentBindings(root:UIComponent):void
 		{
 			// Recursively goes over all children
 			if (root)
@@ -31,9 +33,15 @@ package view.utils
 				{
 					root.dispatchEvent(new Event(Event.CHANGE));
 				}
+				else if (root is CheckBox)
+				{
+					var ev:PropertyChangeEvent = new PropertyChangeEvent(PropertyChangeEvent.PROPERTY_CHANGE);
+					ev.property = "selected";
+					root.dispatchEvent(ev);
+				}
 				for (var i:int=0; i<root.numChildren; i++)
 				{
-					triggerTextBindings(root.getChildAt(i) as UIComponent);
+					triggerComponentBindings(root.getChildAt(i) as UIComponent);
 				}
 			}
 		}

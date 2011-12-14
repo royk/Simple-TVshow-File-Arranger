@@ -52,7 +52,7 @@
 				// Real application starting point is here.
 				m_presenter.parseSettings(event.arguments);
 				m_presenter.init();
-				m_utils.triggerTextBindings(this);
+				m_utils.triggerComponentBindings(this);
 			}
 
 			protected function log_valueCommitHandler(event:FlexEvent):void
@@ -72,33 +72,43 @@
 	<s:HGroup top="10" bottom="10" left="10" right="10">
 		<s:VGroup width="100%" height="100%">
 			<s:VGroup width="100%" height="100%">
-				<s:HGroup>
-					<s:Label text="Source path:"/>
-					<s:TextInput id="inputDir"  text="@{m_presenter.inputDir}"/>
-					<s:Button label="Scan" click="{m_presenter.scanDirectory()}"/>
-					<s:CheckBox label="Recursive" selected="@{m_presenter.recursiveScan}"/>
-				</s:HGroup>
-				<s:Label id="currentFile" text="{m_presenter.currentFileName}"/>
-				<s:HGroup height="53" width="221" right="0">
-					<s:Label text="Name:" height="21"/>
-					<s:TextInput width="165"  id="mediaName" text="@{m_presenter.mediaName}"/>
-				</s:HGroup>
-				<s:HGroup height="53" width="221" right="0">
-					<s:Label height="21" text="Season:"/>
-					<s:TextInput width="150" id="seasonInput" text="@{m_presenter.season}"/>
-				</s:HGroup>
-				<s:HGroup height="53" width="221" right="0">
-					<s:Label text="Move to:" height="21"/>
-					<s:TextInput width="265" id="targetFolder" text="@{m_presenter.targetPath}"/>
-				</s:HGroup>
-				<s:HGroup>
-					<s:Label text="Target path:"/>
-					<s:TextInput id="targetBase" text="@{m_presenter.settings.outputDir}"/>
-				</s:HGroup>
-				<s:HGroup>
-					<s:Button label="Apply to selection" click="{m_presenter.applyChanges(pendingList.selectedItems); pendingList.dataGroup.invalidateDisplayList();}"/>
-					<s:Button label="Delete selection" click="{m_presenter.removeFromPendingList(pendingList.selectedItems);pendingList.dataGroup.invalidateDisplayList();}"/>
-				</s:HGroup>
+				<s:Label text="Settings"/>
+				<s:VGroup paddingLeft="20">
+					<s:HGroup>
+						<s:CheckBox label="Recursive" selected="@{m_presenter.recursiveScan}"/>
+						<s:CheckBox label="Ignore new shows" selected="@{m_presenter.settings.ignoreNewShows}"/>
+					</s:HGroup>
+					<s:HGroup>
+						<s:Label text="Source path:"/>
+						<s:TextInput id="inputDir"  text="@{m_presenter.inputDir}"/>
+					</s:HGroup>
+					<mx:Spacer height="10"/>
+					<s:HGroup>
+						<s:Label text="Target path:"/>
+						<s:TextInput id="targetBase" text="@{m_presenter.settings.outputDir}"/>
+					</s:HGroup>
+				</s:VGroup>
+				<s:Button label="Scan" click="{m_presenter.scanDirectory()}"/>
+				<mx:Spacer height="10"/>
+				<s:Label text="Selection editing"/>
+				<s:VGroup paddingLeft="20" id="selectionEditor" enabled="{pendingList.selectedItem!=null}">
+					<s:HGroup height="53" width="221" right="0">
+						<s:Label text="Name:" height="21"/>
+						<s:TextInput width="165"  id="mediaName" text="@{m_presenter.mediaName}"/>
+					</s:HGroup>
+					<s:HGroup height="53" width="221" right="0">
+						<s:Label height="21" text="Season:"/>
+						<s:TextInput width="150" id="seasonInput" text="@{m_presenter.season}"/>
+					</s:HGroup>
+					<s:HGroup height="53" width="221" right="0">
+						<s:Label text="Move to:" height="21"/>
+						<s:TextInput width="265" id="targetFolder" text="@{m_presenter.targetPath}"/>
+					</s:HGroup>
+					<s:HGroup>
+						<s:Button label="Apply to selection" click="{m_presenter.applyChanges(pendingList.selectedItems); pendingList.dataGroup.invalidateDisplayList();}"/>
+						<s:Button label="Delete selection" click="{m_presenter.removeFromPendingList(pendingList.selectedItems);pendingList.dataGroup.invalidateDisplayList();}"/>
+					</s:HGroup>
+				</s:VGroup>
 			</s:VGroup>
 			<mx:Spacer height="20"/>
 			<s:Button label="Move!" click="{m_presenter.beginMove();}"/>

@@ -114,8 +114,8 @@ package core
 					dbMatch = matchNameToDB(name, fileName);
 					if (dbMatch=="")
 					{
-						name = "The "+name;
-						dbMatch = matchNameToDB(name, fileName);
+						// Try adding "the " to name (i.e. "big bang theory" will be matched with "the bing bang theory")
+						dbMatch = matchNameToDB("The "+name, fileName);
 					}
 					if (dbMatch=="")
 					{

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+					   xmlns:s="library://ns.adobe.com/flex/spark"
+					   xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:defaultView="view.defaultView.*"
+					   width="800"
+					   height="600"
+					   invoke="windowedapplication1_invokeHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			protected function windowedapplication1_invokeHandler(event:InvokeEvent):void
+			{
+				// Real application starting point is here.
+				view.setAppArguments(event.arguments);
+			}
+		]]>
+	</fx:Script>
+<defaultView:MainView id="view">
+
+</defaultView:MainView>
+</s:WindowedApplication>

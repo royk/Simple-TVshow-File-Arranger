@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+    ADOBE SYSTEMS INCORPORATED
+    Copyright 2008 Adobe Systems Incorporated
+    All Rights Reserved.
+
+    NOTICE: Adobe permits you to use, modify, and distribute this file
+    in accordance with the terms of the license agreement accompanying it.
+
+-->
+
+<!--- The default skin class for a Spark SkinnableContainer container.
+
+     @see spark.components.SkinnableContainer
+
+      @langversion 3.0
+      @playerversion Flash 10
+      @playerversion AIR 1.5
+      @productversion Flex 4
+-->
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
+    xmlns:fb="http://ns.adobe.com/flashbuilder/2009" alpha.disabled="0.5">
+
+    <fx:Metadata>
+    <![CDATA[
+        /**
+         * @copy spark.skins.spark.ApplicationSkin#hostComponent
+         */
+        [HostComponent("view.defaultView.skin.CollapsibleGroup")]
+    ]]>
+    </fx:Metadata>
+
+
+
+    <s:states>
+        <s:State name="normal" />
+        <s:State name="disabled" />
+		<s:State name="expanded" />
+    </s:states>
+	<s:layout>
+		<s:VerticalLayout gap="0"/>
+	</s:layout>
+	<s:BorderContainer id="clickContainer" width="100%" height="15"  buttonMode="true">
+		<s:Rect left="0" right="0" top="0" bottom="0" includeIn="normal">
+			<s:fill>
+				<s:SolidColor color="0xff5f5f"/>
+			</s:fill>
+		</s:Rect>
+		<s:Rect left="0" right="0" top="0" bottom="0" includeIn="expanded">
+			<s:fill>
+				<s:SolidColor color="0x5fff5f"/>
+			</s:fill>
+		</s:Rect>
+		<s:Label id="label"/>
+	</s:BorderContainer>
+
+	<s:Group id="contentGroup" width="100%" top="0" bottom="0" minWidth="0" minHeight="0" includeIn="expanded">
+		<s:layout>
+			<s:VerticalLayout/>
+		</s:layout>
+	</s:Group>
+
+
+
+</s:Skin>

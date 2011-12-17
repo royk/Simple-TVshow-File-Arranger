@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
+					  xmlns:s="library://ns.adobe.com/flex/spark"
+					  xmlns:mx="library://ns.adobe.com/flex/mx" creationComplete="skinnablecontainer1_creationCompleteHandler(event)">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+
+	<fx:Metadata>
+		[SkinState("normal")]
+		[SkinState("disabled")]
+		[SkinState("expanded")]
+	</fx:Metadata>
+
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+
+			import spark.components.BorderContainer;
+			import spark.components.Label;
+
+			[SkinPart(required="true")]
+			public var label:Label;
+
+			[SkinPart(required="true")]
+			public var clickContainer:BorderContainer;
+
+			private var m_text:String;
+
+			[Bindable]
+			public function set text(value:String):void
+			{
+				if (label)
+				{
+					label.text = value;
+				}
+				m_text = value;
+			}
+
+			public function get text():String
+			{
+				return m_text;
+			}
+
+			protected function onClick(event:MouseEvent):void
+			{
+				if (currentState=="normal")
+				{
+					currentState = "expanded";
+				}
+				else
+				{
+					currentState = "normal";
+				}
+			}
+
+			protected function skinnablecontainer1_creationCompleteHandler(event:FlexEvent):void
+			{
+				clickContainer.addEventListener(MouseEvent.CLICK, onClick);
+				label.text = m_text;
+			}
+
+			override protected function getCurrentSkinState():String
+			{
+				return currentState;
+			}
+
+		]]>
+	</fx:Script>
+
+	<s:states>
+		<s:State name="normal" enterState="invalidateSkinState()" />
+		<s:State name="disabled" enterState="invalidateSkinState()" />
+		<s:State name="expanded" enterState="invalidateSkinState()" />
+	</s:states>
+
+
+</s:SkinnableContainer>

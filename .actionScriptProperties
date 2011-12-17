@@ -15,13 +15,13 @@
     <sourceAttachmentPath/>
   </compiler>
   <applications>
-    <application path="Main.mxml">
+    <application path="FlexUnitApplication.mxml">
       <airExcludes/>
     </application>
     <application path="FlexUnitCompilerApplication.mxml">
       <airExcludes/>
     </application>
-    <application path="FlexUnitApplication.mxml">
+    <application path="STFA.mxml">
       <airExcludes/>
     </application>
   </applications>

@@ -29,8 +29,19 @@
          * @copy spark.skins.spark.ApplicationSkin#hostComponent
          */
         [HostComponent("view.defaultView.skin.CollapsibleGroup")]
+		
+		
     ]]>
     </fx:Metadata>
+	
+	<fx:Script>
+		<![CDATA[
+			override protected function stateChanged(oldState:String, newState:String, recursive:Boolean):void
+			{
+				super.stateChanged(oldState, newState, recursive);
+			}
+		]]>
+	</fx:Script>
 
 
 

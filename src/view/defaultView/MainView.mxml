@@ -18,7 +18,7 @@
 			import spark.events.TextOperationEvent;
 
 			import view.IMainView;
-			import view.defaultView.skin.CollapsibleGroupSkin1;
+			import view.defaultView.skin.CollapsibleGroupSkin;
 			import view.utils.ViewUtils;
 			[Bindable]
 			private var m_presenter:MainPresenter;
@@ -120,7 +120,7 @@
 		</s:VGroup>
 		<s:VGroup width="100%" height="100%" gap="0">
 			<s:List id="pendingList" dataProvider="{m_presenter.pendingFiles}" change="{m_presenter.modifyFiles(pendingList.selectedItems)}" width="100%" height="100%" allowMultipleSelection="true" itemRenderer="view.defaultView.MainViewPendingRenderer"/>
-			<skin:CollapsibleGroup skinClass="view.defaultView.skin.CollapsibleGroupSkin1"  width="100%" text=" + Log">
+			<skin:CollapsibleGroup skinClass="view.defaultView.skin.CollapsibleGroupSkin"  width="100%" collapsedText=" + Log" expandedText=" - Log">
 				<s:TextArea id="log" text="{m_presenter.log}" width="100%" editable="false" valueCommit="log_valueCommitHandler(event)"/>
 			</skin:CollapsibleGroup>
 		</s:VGroup>

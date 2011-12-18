@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
-					   xmlns:s="library://ns.adobe.com/flex/spark"
-					   xmlns:mx="library://ns.adobe.com/flex/mx" height="600" width="800"
-					   creationComplete="windowedapplication1_creationCompleteHandler(event)"
-					   invoke="windowedapplication1_invokeHandler(event)"
-					   implements="view.IMainView" xmlns:defaultSkin="view.defaultSkin.*">
-
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx" height="100%" width="100%"
+		 creationComplete="windowedapplication1_creationCompleteHandler(event)"
+		 implements="view.IMainView" xmlns:skin="view.defaultView.skin.*">
 	<fx:Script>
 		<![CDATA[
 			import flash.utils.setTimeout;
@@ -20,11 +18,18 @@
 			import spark.events.TextOperationEvent;
 
 			import view.IMainView;
-			import view.MainViewPendingRenderer;
+			import view.defaultView.skin.CollapsibleGroupSkin;
 			import view.utils.ViewUtils;
 			[Bindable]
 			private var m_presenter:MainPresenter;
 			private var m_utils:ViewUtils = new ViewUtils();
+
+			public function setAppArguments(value:Array):void
+			{
+				m_presenter.parseSettings(value);
+				m_presenter.init();
+				m_utils.triggerComponentBindings(this);
+			}
 
 			private function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
 			{
@@ -36,7 +41,7 @@
 			{
 				if (m_presenter.settings.autoRun)
 				{
-					nativeApplication.exit();
+					NativeApplication.nativeApplication.exit();
 				}
 			}
 
@@ -47,14 +52,6 @@
 			}
 
 
-			protected function windowedapplication1_invokeHandler(event:InvokeEvent):void
-			{
-				// Real application starting point is here.
-				m_presenter.parseSettings(event.arguments);
-				m_presenter.init();
-				m_utils.triggerComponentBindings(this);
-			}
-
 			protected function log_valueCommitHandler(event:FlexEvent):void
 			{
 				m_utils.scrollToBottom(log);
@@ -64,9 +61,9 @@
 	</fx:Script>
 
 	<fx:Declarations>
-			<s:RadioButtonGroup id="mediaType"
-								itemClick="mediaType_itemClickHandler(event)">
-			</s:RadioButtonGroup>
+		<s:RadioButtonGroup id="mediaType"
+							itemClick="mediaType_itemClickHandler(event)">
+		</s:RadioButtonGroup>
 
 	</fx:Declarations>
 	<s:HGroup top="10" bottom="10" left="10" right="10">
@@ -74,8 +71,8 @@
 			<s:Button label="Scan" click="{m_presenter.scanDirectory()}"/>
 			<mx:Spacer height="10"/>
 			<s:VGroup width="100%" height="100%" paddingLeft="20">
-				<defaultSkin:GroupTitle id="settingsLabel" label="Settings"  click="{settingsLabel.toggleState()}"/>
-				<s:SkinnableContainer skinClass="view.defaultSkin.GroupBorder" visible="{settingsLabel.on}" includeInLayout="{settingsLabel.on}">
+				<skin:GroupTitle id="settingsLabel" label="Settings"  click="{settingsLabel.toggleState()}"/>
+				<s:SkinnableContainer skinClass="view.defaultView.skin.GroupBorder" visible="{settingsLabel.on}" includeInLayout="{settingsLabel.on}">
 					<s:layout>
 						<s:VerticalLayout/>
 					</s:layout>
@@ -94,8 +91,8 @@
 					</s:HGroup>
 				</s:SkinnableContainer>
 
-				<defaultSkin:GroupTitle id="editingLabel" label="Selection Editing" click="{editingLabel.toggleState()}"/>
-				<s:SkinnableContainer skinClass="view.defaultSkin.GroupBorder" id="selectionEditor" visible="{editingLabel.on}" includeInLayout="{editingLabel.on}" enabled="{pendingList.selectedItem!=null}" width="100%">
+				<skin:GroupTitle id="editingLabel" label="Selection Editing" click="{editingLabel.toggleState()}"/>
+				<s:SkinnableContainer skinClass="view.defaultView.skin.GroupBorder" id="selectionEditor" visible="{editingLabel.on}" includeInLayout="{editingLabel.on}" enabled="{pendingList.selectedItem!=null}" width="100%">
 					<s:layout>
 						<s:VerticalLayout/>
 					</s:layout>
@@ -112,18 +109,21 @@
 						<s:TextInput width="265" id="targetFolder" text="@{m_presenter.targetPath}"/>
 					</s:HGroup>
 					<s:HGroup>
-						<s:Button label="Apply to selection" click="{m_presenter.applyChanges(pendingList.selectedItems); pendingList.dataGroup.invalidateDisplayList();}"/>
+						<s:Button label="Apply to selection" click="{m_presenter.applyModificationToSelection(pendingList.selectedItems); pendingList.dataGroup.invalidateDisplayList();}"/>
 						<s:Button label="Delete selection" click="{m_presenter.removeFromPendingList(pendingList.selectedItems);pendingList.dataGroup.invalidateDisplayList();}"/>
 					</s:HGroup>
 				</s:SkinnableContainer>
 			</s:VGroup>
 			<mx:Spacer height="20"/>
-			<s:Button label="Move!" click="{m_presenter.beginMove();}"/>
-			<s:TextArea id="log" text="{m_presenter.log}" editable="false" width="100%" height="100%" valueCommit="log_valueCommitHandler(event)"/>
-		</s:VGroup>
-		<mx:Spacer width="20"/>
-		<s:List id="pendingList" dataProvider="{m_presenter.pendingFiles}" change="{m_presenter.modifyFiles(pendingList.selectedItems)}" bottom="10" right="10" width="100%" height="100%" allowMultipleSelection="true" itemRenderer="view.MainViewPendingRenderer">
+			<s:Button label="Move!" click="{m_presenter.moveNextFile();}"/>
 
-		</s:List>
+		</s:VGroup>
+		<s:VGroup width="100%" height="100%" gap="0">
+			<s:List id="pendingList" dataProvider="{m_presenter.pendingFiles}" change="{m_presenter.fillModificationDataFromSelection(pendingList.selectedItems)}" width="100%" height="100%" allowMultipleSelection="true" itemRenderer="view.defaultView.MainViewPendingRenderer"/>
+			<skin:CollapsibleGroup skinClass="view.defaultView.skin.CollapsibleGroupSkin"  width="100%" collapsedText=" + Log" expandedText=" - Log">
+				<s:TextArea id="log" text="{m_presenter.log}" width="100%" editable="false" valueCommit="log_valueCommitHandler(event)"/>
+			</skin:CollapsibleGroup>
+		</s:VGroup>
 	</s:HGroup>
-</s:WindowedApplication>
+
+</s:Group>

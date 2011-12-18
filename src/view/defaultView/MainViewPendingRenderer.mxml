@@ -11,8 +11,25 @@
 				{
 					showPath.htmlText = value.pathBase+"\\<font color='#ff0000'>"+value.show.name+"</font>"+"\\<font color='#c71585'>s"+value.show.season+"</font>\\"+value.show.fileName;
 				}
+				bgFill.color = getColor();
 			}
+
+			private function getColor():uint
+			{
+				var style:Array = [0xffffff, 0xe4e4e4];
+				styleManager.getColorNames(style);
+				var ret:uint = style[itemIndex % style.length];
+				trace(itemIndex, itemIndex % style.length, ret);
+				return ret;
+			}
+
 		]]>
 	</fx:Script>
+	<s:Rect id="bgRect" left="0" right="0" top="0" bottom="0">
+		<s:fill>
+			<s:SolidColor id="bgFill"/>
+		</s:fill>
+	</s:Rect>
+
 	<mx:Text id="showPath"/>
 </s:ItemRenderer>

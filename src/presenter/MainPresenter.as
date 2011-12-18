@@ -50,7 +50,7 @@ package presenter
 			if (settings.autoRun)
 			{
 				scanDirectory();
-				beginMove();
+				moveNextFile();
 			}
 		}
 		
@@ -167,12 +167,6 @@ package presenter
 			updateTargetName();
 		}
 
-		private function crawlFiles():void
-		{
-			var dir:File = new File(inputDir);
-			m_files = m_core.crawlDirectory(dir);
-		}
-
 		public function parseSettings(args:Array):void
 		{
 			var pair:Array;
@@ -183,7 +177,7 @@ package presenter
 				{
 					if (m_core.settings[pair[0]] is Boolean)
 					{
-						m_core.settings[pair[0]] = pair[1]=="true";
+						m_core.settings[pair[0]] = (pair[1]=="true");
 					}
 					else
 					{
@@ -195,6 +189,8 @@ package presenter
 
 		public function scanDirectory():void
 		{
+			writeLog("Scanning "+m_core.settings.inputDir+". Recursive: "+m_core.settings.recursiveScan);
+			checkDBStatus();
 			crawlFiles();
 			m_files.sort(
 				// sort files by name over the entire path
@@ -208,22 +204,63 @@ package presenter
 				}
 
 			);
+			scanFilesForShows();
+		}
+		
+		private function checkDBStatus():void
+		{
+			if (m_core.showsDBAvailable==false && m_core.settings.ignoreNewShows)
+			{
+				writeLog("** Can't access shows Database. Will not ignore new shows");
+			}
+		}
+		
+		private function crawlFiles():void
+		{
+			var dir:File = new File(inputDir);
+			m_files = m_core.crawlDirectory(dir);
+		}
+		
+		private function scanFilesForShows():void
+		{
+			var result:String;
 			for (var i:int=0; i<m_files.length; i++)
 			{
 				file = new File(m_files[i]);
 				writeLog("Processing "+file.name);
-				if (process())
+				result = process();
+				if (result=="OK")
 				{
 					addFileToPendingList();
 				}
 				else
 				{
-					writeLog("\tFile name doesn't contain show info. Skipping");
+					writeLog("\t"+result);
+				}
+			}
+		}
+		
+		private function addFileToPendingList():void
+		{
+			if (file && settings.outputDir)
+			{
+				var moveFile:File = new File(file.nativePath);
+				var newLocation:File = new File(targetPath);
+				if (newLocation.exists==false)
+				{
+					pendingFiles.addItem({	file:moveFile,
+						location:newLocation,
+						pathBase:settings.outputDir,
+						show:m_currentShow});
+				}
+				else
+				{
+					writeLog("\tFile already exists at target path, skipping");
 				}
 			}
 		}
 
-		public function beginMove():void
+		public function moveNextFile():void
 		{
 			if (pendingFiles.length>0)
 			{
@@ -244,18 +281,18 @@ package presenter
 		public function moveSuccess():void
 		{
 			writeLog("\tMove succeeded");
-			beginMove();
+			moveNextFile();
 		}
 
 		public function moveError(failedFile:String, reason:String):void
 		{
 			writeLog("\tFailed moving: "+failedFile+". "+reason);
-			beginMove();
+			moveNextFile();
 		}
 		// END IFileIOObserver functions
 
 
-		public function modifyFiles(selectedItems:Vector.<Object>):void
+		public function fillModificationDataFromSelection(selectedItems:Vector.<Object>):void
 		{
 			if (selectedItems.length)
 			{
@@ -266,7 +303,7 @@ package presenter
 			}
 		}
 
-		public function applyChanges(selectedItems:Vector.<Object>):void
+		public function applyModificationToSelection(selectedItems:Vector.<Object>):void
 		{
 			for each (var o:Object in selectedItems)
 			{
@@ -285,46 +322,26 @@ package presenter
 			}
 		}
 
-		private function addFileToPendingList():void
-		{
-			if (file && settings.outputDir)
-			{
-				var moveFile:File = new File(file.nativePath);
-				var newLocation:File = new File(targetPath);
-				if (newLocation.exists==false)
-				{
-					pendingFiles.addItem({	file:moveFile,
-											location:newLocation,
-											pathBase:settings.outputDir,
-											show:m_currentShow});
-				}
-				else
-				{
-					writeLog("\tFile already exists at target path, skipping");
-				}
-			}
-		}
-
 		private function writeLog(value:String):void
 		{
 			log += value;
 			log += "\n";
 		}
 
-		private function process():Boolean
+		private function process():String
 		{
 			m_currentShow = null;
 			var res:Object = m_core.extractEpisodeInfo(file.name);
 			if (res)
 			{
 				var show:Show = m_core.processShow(file.name, res);
-				if (show)
+				if (show && show.status=="OK")
 				{
 					applyShowData(show);
-					return true;
 				}
+				return show.status;
 			}
-			return false;
+			return "Unable to extract show from file.";
 		}
 
 		private function applyShowData(show:Show):void

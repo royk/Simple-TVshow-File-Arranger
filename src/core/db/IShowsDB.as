@@ -5,6 +5,7 @@ package core.db
 		function init		()				:void;
 		function addShow	(name:String)	:void;
 		function getShows	()				:Array;
+		function get ready	()				:Boolean;
 
 	}
 }

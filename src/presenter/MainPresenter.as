@@ -189,6 +189,8 @@ package presenter
 
 		public function scanDirectory():void
 		{
+			writeLog("Scanning "+m_core.settings.inputDir+". Recursive: "+m_core.settings.recursiveScan);
+			checkDBStatus();
 			crawlFiles();
 			m_files.sort(
 				// sort files by name over the entire path
@@ -203,6 +205,14 @@ package presenter
 
 			);
 			scanFilesForShows();
+		}
+		
+		private function checkDBStatus():void
+		{
+			if (m_core.showsDBAvailable==false && m_core.settings.ignoreNewShows)
+			{
+				writeLog("** Can't access shows Database. Will not ignore new shows");
+			}
 		}
 		
 		private function crawlFiles():void
@@ -325,11 +335,11 @@ package presenter
 			if (res)
 			{
 				var show:Show = m_core.processShow(file.name, res);
-				if (show)
+				if (show && show.status=="OK")
 				{
 					applyShowData(show);
-					return "OK";
 				}
+				return show.status;
 			}
 			return "Unable to extract show from file.";
 		}

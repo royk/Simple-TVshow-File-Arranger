@@ -7,5 +7,6 @@ package core.mediaInfo
 		public var originalName		:String = "";
 		public var season			:int 	= 0;
 		public var episode			:int 	= 0;
+		public var status			:String		= "OK";
 	}
 }

@@ -18,6 +18,11 @@ package core.db
 		{
 			m_dbFile = file;
 		}
+		
+		public function get ready():Boolean
+		{
+			return m_inited;
+		}
 
 		public function init():void
 		{

@@ -1,0 +1,16 @@
+/* CSS file */
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/mx";
+
+.logoFont
+{
+	fontSize: 15;
+	color: #9933FF;
+	fontStyle: italic;
+	fontWeight: bold;
+}
+
+.subLogoFont
+{
+	fontSize: 15;
+}

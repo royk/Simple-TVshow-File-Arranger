@@ -59,71 +59,79 @@
 
 		]]>
 	</fx:Script>
-
+		<fx:Style source="/view/defaultView/css/defaultView.css"/>
 	<fx:Declarations>
 		<s:RadioButtonGroup id="mediaType"
 							itemClick="mediaType_itemClickHandler(event)">
 		</s:RadioButtonGroup>
 
 	</fx:Declarations>
-	<s:HGroup top="10" bottom="10" left="10" right="10">
-		<s:VGroup width="100%" height="100%">
-			<s:Button label="Scan" click="{m_presenter.scanDirectory()}"/>
-			<mx:Spacer height="10"/>
-			<s:VGroup width="100%" height="100%" paddingLeft="20">
-				<skin:GroupTitle id="settingsLabel" label="Settings"  click="{settingsLabel.toggleState()}"/>
-				<s:SkinnableContainer skinClass="view.defaultView.skin.GroupBorder" visible="{settingsLabel.on}" includeInLayout="{settingsLabel.on}">
-					<s:layout>
-						<s:VerticalLayout/>
-					</s:layout>
-					<s:HGroup>
-						<s:CheckBox label="Recursive" selected="@{m_presenter.recursiveScan}"/>
-						<s:CheckBox label="Ignore new shows" selected="@{m_presenter.settings.ignoreNewShows}"/>
-					</s:HGroup>
-					<s:HGroup>
-						<s:Label text="Source path:"/>
-						<s:TextInput id="inputDir"  text="@{m_presenter.inputDir}"/>
-					</s:HGroup>
-					<mx:Spacer height="10"/>
-					<s:HGroup>
-						<s:Label text="Target path:"/>
-						<s:TextInput id="targetBase" text="@{m_presenter.settings.outputDir}"/>
-					</s:HGroup>
-				</s:SkinnableContainer>
-
-				<skin:GroupTitle id="editingLabel" label="Selection Editing" click="{editingLabel.toggleState()}"/>
-				<s:SkinnableContainer skinClass="view.defaultView.skin.GroupBorder" id="selectionEditor" visible="{editingLabel.on}" includeInLayout="{editingLabel.on}" enabled="{pendingList.selectedItem!=null}" width="100%">
-					<s:layout>
-						<s:VerticalLayout/>
-					</s:layout>
-					<s:HGroup height="53" width="221" right="0">
-						<s:Label text="Name:" height="21"/>
-						<s:TextInput width="165"  id="mediaName" text="@{m_presenter.mediaName}"/>
-					</s:HGroup>
-					<s:HGroup height="53" width="221" right="0">
-						<s:Label height="21" text="Season:"/>
-						<s:TextInput width="150" id="seasonInput" text="@{m_presenter.season}"/>
-					</s:HGroup>
-					<s:HGroup height="53" width="221" right="0">
-						<s:Label text="Move to:" height="21"/>
-						<s:TextInput width="265" id="targetFolder" text="@{m_presenter.targetPath}"/>
-					</s:HGroup>
-					<s:HGroup>
-						<s:Button label="Apply to selection" click="{m_presenter.applyModificationToSelection(pendingList.selectedItems); pendingList.dataGroup.invalidateDisplayList();}"/>
-						<s:Button label="Delete selection" click="{m_presenter.removeFromPendingList(pendingList.selectedItems);pendingList.dataGroup.invalidateDisplayList();}"/>
-					</s:HGroup>
-				</s:SkinnableContainer>
+	<s:VGroup id="logo_app" left="10" right="10" top="10" bottom="10">
+		<s:HGroup id="logo_container">
+			<s:Label text="EZRONET" styleName="logoFont"/>
+			<s:Label text="The semi automatic tv show arranger" styleName="subLogoFont"/>
+		</s:HGroup>
+		<s:SkinnableContainer id="app_container" skinClass="view.defaultView.skin.GroupBorder" width="100%" height="100%">
+			<s:layout>
+				<s:HorizontalLayout/>
+			</s:layout>
+			<s:VGroup width="100%" height="100%">
+				<s:Button label="Scan" click="{m_presenter.scanDirectory()}"/>
+				<mx:Spacer height="10"/>
+				<s:VGroup width="100%" height="100%" paddingLeft="20">
+					<skin:GroupTitle id="settingsLabel" label="Settings"  click="{settingsLabel.toggleState()}"/>
+					<s:SkinnableContainer skinClass="view.defaultView.skin.GroupBorder" visible="{settingsLabel.on}" includeInLayout="{settingsLabel.on}">
+						<s:layout>
+							<s:VerticalLayout/>
+						</s:layout>
+						<s:HGroup>
+							<s:CheckBox label="Recursive" selected="@{m_presenter.recursiveScan}"/>
+							<s:CheckBox label="Ignore new shows" selected="@{m_presenter.settings.ignoreNewShows}"/>
+						</s:HGroup>
+						<s:HGroup>
+							<s:Label text="Source path:"/>
+							<s:TextInput id="inputDir"  text="@{m_presenter.inputDir}"/>
+						</s:HGroup>
+						<mx:Spacer height="10"/>
+						<s:HGroup>
+							<s:Label text="Target path:"/>
+							<s:TextInput id="targetBase" text="@{m_presenter.settings.outputDir}"/>
+						</s:HGroup>
+					</s:SkinnableContainer>
+	
+					<skin:GroupTitle id="editingLabel" label="Selection Editing" click="{editingLabel.toggleState()}"/>
+					<s:SkinnableContainer skinClass="view.defaultView.skin.GroupBorder" id="selectionEditor" visible="{editingLabel.on}" includeInLayout="{editingLabel.on}" enabled="{pendingList.selectedItem!=null}" width="100%">
+						<s:layout>
+							<s:VerticalLayout/>
+						</s:layout>
+						<s:HGroup height="53" width="221" right="0">
+							<s:Label text="Name:" height="21"/>
+							<s:TextInput width="165"  id="mediaName" text="@{m_presenter.mediaName}"/>
+						</s:HGroup>
+						<s:HGroup height="53" width="221" right="0">
+							<s:Label height="21" text="Season:"/>
+							<s:TextInput width="150" id="seasonInput" text="@{m_presenter.season}"/>
+						</s:HGroup>
+						<s:HGroup height="53" width="221" right="0">
+							<s:Label text="Move to:" height="21"/>
+							<s:TextInput width="265" id="targetFolder" text="@{m_presenter.targetPath}"/>
+						</s:HGroup>
+						<s:HGroup>
+							<s:Button label="Apply to selection" click="{m_presenter.applyModificationToSelection(pendingList.selectedItems); pendingList.dataGroup.invalidateDisplayList();}"/>
+							<s:Button label="Delete selection" click="{m_presenter.removeFromPendingList(pendingList.selectedItems);pendingList.dataGroup.invalidateDisplayList();}"/>
+						</s:HGroup>
+					</s:SkinnableContainer>
+				</s:VGroup>
+				<mx:Spacer height="20"/>
+				<s:Button label="Move!" click="{m_presenter.moveNextFile();}"/>
+	
 			</s:VGroup>
-			<mx:Spacer height="20"/>
-			<s:Button label="Move!" click="{m_presenter.moveNextFile();}"/>
-
-		</s:VGroup>
-		<s:VGroup width="100%" height="100%" gap="0">
-			<s:List id="pendingList" dataProvider="{m_presenter.pendingFiles}" change="{m_presenter.fillModificationDataFromSelection(pendingList.selectedItems)}" width="100%" height="100%" allowMultipleSelection="true" itemRenderer="view.defaultView.MainViewPendingRenderer"/>
-			<skin:CollapsibleGroup skinClass="view.defaultView.skin.CollapsibleGroupSkin"  width="100%" collapsedText=" + Log" expandedText=" - Log">
-				<s:TextArea id="log" text="{m_presenter.log}" width="100%" editable="false" valueCommit="log_valueCommitHandler(event)"/>
-			</skin:CollapsibleGroup>
-		</s:VGroup>
-	</s:HGroup>
-
+			<s:VGroup width="100%" height="100%" gap="0">
+				<s:List id="pendingList" dataProvider="{m_presenter.pendingFiles}" change="{m_presenter.fillModificationDataFromSelection(pendingList.selectedItems)}" width="100%" height="100%" allowMultipleSelection="true" itemRenderer="view.defaultView.MainViewPendingRenderer"/>
+				<skin:CollapsibleGroup skinClass="view.defaultView.skin.CollapsibleGroupSkin"  width="100%" collapsedText=" + Log" expandedText=" - Log">
+					<s:TextArea id="log" text="{m_presenter.log}" width="100%" editable="false" valueCommit="log_valueCommitHandler(event)"/>
+				</skin:CollapsibleGroup>
+			</s:VGroup>
+		</s:SkinnableContainer>
+	</s:VGroup>
 </s:Group>

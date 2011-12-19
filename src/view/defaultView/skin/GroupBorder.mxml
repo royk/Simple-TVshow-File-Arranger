@@ -50,9 +50,9 @@
     </s:states>
     <!--- Defines the appearance of the SkinnableContainer class's background. -->
 
-	<s:Rect left="0" right="0" top="5" bottom="0">
-		<s:stroke>
-			<s:LinearGradientStroke weight="1"/>
+	<s:Rect left="0" right="0" top="5" bottom="0" radiusX="10" radiusY="10">
+		<s:stroke >
+			<s:LinearGradientStroke weight="1" joints="{JointStyle.ROUND}"/>
 		</s:stroke>
     </s:Rect>
 

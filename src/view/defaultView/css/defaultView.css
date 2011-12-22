@@ -14,3 +14,10 @@
 {
 	fontSize: 15;
 }
+
+.appBackground
+{
+	background-color: #4682B4;
+	background-alpha: 0.5;
+}
+

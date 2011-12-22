@@ -14,8 +14,11 @@ package presenter
 
 	import mx.collections.ArrayList;
 	import mx.collections.IList;
+	import mx.events.CollectionEvent;
 	import mx.events.ItemClickEvent;
 	import mx.events.PropertyChangeEvent;
+
+	import spark.components.List;
 
 	import view.IMainView;
 
@@ -53,7 +56,7 @@ package presenter
 				moveNextFile();
 			}
 		}
-		
+
 		public function get settings():Settings
 		{
 			return m_core.settings;
@@ -164,6 +167,7 @@ package presenter
 		public function set season(value:String):void
 		{
 			m_season = value;
+			m_currentShow.season = int(value);
 			updateTargetName();
 		}
 
@@ -206,7 +210,7 @@ package presenter
 			);
 			scanFilesForShows();
 		}
-		
+
 		private function checkDBStatus():void
 		{
 			if (m_core.showsDBAvailable==false && m_core.settings.ignoreNewShows)
@@ -214,13 +218,13 @@ package presenter
 				writeLog("** Can't access shows Database. Will not ignore new shows");
 			}
 		}
-		
+
 		private function crawlFiles():void
 		{
 			var dir:File = new File(inputDir);
 			m_files = m_core.crawlDirectory(dir);
 		}
-		
+
 		private function scanFilesForShows():void
 		{
 			var result:String;
@@ -239,7 +243,7 @@ package presenter
 				}
 			}
 		}
-		
+
 		private function addFileToPendingList():void
 		{
 			if (file && settings.outputDir)
@@ -311,6 +315,7 @@ package presenter
 				(o.show as Show).season = int(season);
 				o.location = new File(getTargetName(o.show));
 				o.label = o.location.nativePath;
+				m_movementStack.itemUpdated(o);
 			}
 		}
 

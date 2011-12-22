@@ -1,15 +1,15 @@
-Simple TVshow File Arrnager (STFA)
+Movem Shows
 
 Still in development (pre alpha)
 
-The main goal of STFA is to arrange your tv show files under a conventional folder structure with as little input from you as possible. Its secondary goal is to snuggly fit within a flow of an automated Media Center.
+The main goal of Movem Shows is to arrange your tv show files under a conventional folder structure with as little input from you as possible. Its secondary goal is to snuggly fit within a flow of an automated Media Center.
 
-Some of the main features of STFA:
-> Extremely fast due to a complete local operation. No reliance on internet services.
+Some of the main features of Movem:
+> Extremely fast processing due to a complete local operation. No reliance on internet services.
 > Smart algorithm that can correctly guess the TV show's name and season from many types of file name formats.
 > Can use XBMC to improve the guesswork
 > Manual mode allows easy correction of bad guesses
-> Guess corrections are stored to improve future guesses (TBD)
+> Guess corrections can be stored to improve future guesses (TBD)
 > Auto mode requires no user input at all
 > When connected to XBMC, can ignore shows that are not listed in your Database.
 > Completely configurable via command line arguments for auto execution

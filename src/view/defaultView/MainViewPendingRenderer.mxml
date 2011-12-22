@@ -2,7 +2,7 @@
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
 				xmlns:s="library://ns.adobe.com/flex/spark"
 				xmlns:mx="library://ns.adobe.com/flex/mx"
-				autoDrawBackground="true">
+				autoDrawBackground="true" buttonMode="true">
 	<fx:Script>
 		<![CDATA[
 			override public function set data(value:Object):void
@@ -11,12 +11,15 @@
 				{
 					showPath.htmlText = value.pathBase+"\\<font color='#ff0000'>"+value.show.name+"</font>"+"\\<font color='#c71585'>s"+value.show.season+"</font>\\"+value.show.fileName;
 				}
-				bgFill.color = getColor();
+				if (bgFill)
+				{
+					bgFill.color = getColor();
+				}
 			}
 
 			private function getColor():uint
 			{
-				var style:Array = [0xffffff, 0xe4e4e4];
+				var style:Array = [0xf0f0f0, 0xffffff];
 				styleManager.getColorNames(style);
 				var ret:uint = style[itemIndex % style.length];
 				trace(itemIndex, itemIndex % style.length, ret);
@@ -25,11 +28,30 @@
 
 		]]>
 	</fx:Script>
-	<s:Rect id="bgRect" left="0" right="0" top="0" bottom="0">
+
+	<s:states>
+		<s:State name="normal"/>
+		<s:State name="hovered"/>
+		<s:State name="selected"/>
+	</s:states>
+
+	<s:Rect id="bgRect" left="0" right="0" top="0" bottom="0" >
 		<s:fill>
 			<s:SolidColor id="bgFill"/>
 		</s:fill>
 	</s:Rect>
 
-	<mx:Text id="showPath"/>
+	<s:Rect left="0" right="0" top="0" bottom="0" includeIn="hovered">
+		<s:fill>
+			<s:SolidColor color="#CCFFFF"/>
+		</s:fill>
+	</s:Rect>
+
+	<s:Rect left="0" right="0" top="0" bottom="0" includeIn="selected">
+		<s:fill>
+			<s:SolidColor color="#CCCCFF"/>
+		</s:fill>
+	</s:Rect>
+
+	<mx:Text id="showPath" buttonMode="true" useHandCursor="true" mouseChildren="false" />
 </s:ItemRenderer>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		xmlns:mx="library://ns.adobe.com/flex/mx">
+	<!-- host component -->
+	<fx:Metadata>
+		[HostComponent("spark.components.BorderContainer")]
+	</fx:Metadata>
+	<s:states>
+		<s:State name="disabled" />
+		<s:State name="normal" />
+	</s:states>
+
+	<s:BorderContainer width="100%" height="38" borderColor="0xECECEC" borderWeight="2" cornerRadius="2">
+		<s:Rect width="100%" height="100%" >
+			<s:fill>
+				<s:RadialGradient>
+					<s:GradientEntry color="0xE8E8E8" ratio=".2" alpha="1"/>
+					<s:GradientEntry color="0xACACAC" ratio="0.8" alpha="1"/>
+				</s:RadialGradient>
+			</s:fill>
+		</s:Rect>
+	</s:BorderContainer>
+
+	<s:Group id="contentGroup" height="100%">
+		<s:layout>
+			<s:HorizontalLayout verticalAlign="middle" paddingLeft="20"/>
+		</s:layout>
+	</s:Group>
+	<!-- SkinParts
+	name=contentGroup, type=spark.components.Group, required=false
+	name=contentGroup, type=spark.components.Group, required=false
+	-->
+</s:Skin>

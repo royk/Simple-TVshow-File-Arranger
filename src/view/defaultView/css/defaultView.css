@@ -17,7 +17,12 @@
 
 .appBackground
 {
-	background-color: #a0a0a0;
-	background-alpha: 0.2;
+	background-color: #ffffff;
 }
 
+.buttonLabel
+{
+	color: #FFFFFF;
+	fontSize: 15;
+	fontWeight: bold;
+}

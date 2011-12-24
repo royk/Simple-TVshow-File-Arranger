@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+    ADOBE SYSTEMS INCORPORATED
+    Copyright 2008 Adobe Systems Incorporated
+    All Rights Reserved.
+
+    NOTICE: Adobe permits you to use, modify, and distribute this file
+    in accordance with the terms of the license agreement accompanying it.
+
+-->
+
+<!--- The default skin class for the Spark ButtonBar component. The buttons on the ButtonBar component
+    use the ButtonBarLastButtonSkin, ButtonBarFirstButtonSkin and ButtonBarMiddleButtonSkin classes.
+
+      @see spark.components.ButtonBar
+      @see spark.components.ButtonBarButton
+
+      @langversion 3.0
+      @playerversion Flash 10
+      @playerversion AIR 1.5
+      @productversion Flex 4
+-->
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark">
+    <fx:Metadata>[HostComponent("spark.components.Button")]</fx:Metadata>
+	<fx:Script>
+		<![CDATA[
+			import spark.filters.DropShadowFilter;
+		]]>
+	</fx:Script>
+
+    <s:states>
+		<s:State name="up"/>
+		<s:State name="over"/>
+		<s:State name="down"/>
+		<s:State name="disabled"/>
+    </s:states>
+
+	<s:BorderContainer height="38" borderColor="0xFAA43A" borderAlpha="1" cornerRadius="8" backgroundColor="0xFAA43A" filters="{[new spark.filters.DropShadowFilter(4, 90, 0xDD8851, 1, 4, 4, 1, 1)]}">
+		<s:layout>
+			<s:HorizontalLayout verticalAlign="middle" horizontalAlign="center"/>
+		</s:layout>
+		<s:Label id="labelDisplay" styleName="buttonLabel"/>
+	</s:BorderContainer>
+
+
+</s:Skin>

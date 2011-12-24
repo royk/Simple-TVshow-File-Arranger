@@ -20,7 +20,10 @@
 			import spark.filters.DropShadowFilter;
 
 			import view.IMainView;
+			import view.defaultView.skin.ButtonSkin1;
 			import view.defaultView.skin.CollapsibleGroupSkin;
+			import view.defaultView.skin.containerWithHeader.ContainerBody;
+			import view.defaultView.skin.containerWithHeader.ContainerHeader;
 			import view.utils.ViewUtils;
 			[Bindable]
 			private var m_presenter:MainPresenter;
@@ -79,8 +82,8 @@
 				<s:VerticalLayout/>
 			</s:layout>
 			<s:HGroup id="logo_container">
-				<s:Label text="EZRONET" styleName="logoFont"/>
-				<s:Label text="The semi automatic tv show arranger" styleName="subLogoFont"/>
+				<s:Label text="MOVEM" styleName="logoFont"/>
+				<s:Label text="Shows" styleName="subLogoFont"/>
 			</s:HGroup>
 			<s:BorderContainer id="app_container"  width="100%" height="100%" styleName="appBackground" borderColor="0x000000" borderAlpha="1" cornerRadius="10" >
 				<s:layout>
@@ -89,55 +92,63 @@
 				<s:VGroup width="100%" height="100%">
 
 					<s:VGroup width="100%" height="100%" paddingLeft="20">
-						<skin:GroupTitle id="settingsLabel" label="Settings"  on="true"/>
-						<s:BorderContainer visible="{settingsLabel.on}" includeInLayout="{settingsLabel.on}" styleName="appBackground" borderColor="0x000000" borderAlpha="1" cornerRadius="10" width="100%">
-							<s:layout>
-								<s:VerticalLayout paddingLeft="15" paddingRight="15" paddingTop="15" paddingBottom="15"/>
-							</s:layout>
-							<s:HGroup>
-								<s:CheckBox label="Recursive" selected="@{m_presenter.recursiveScan}"/>
-								<s:CheckBox label="Ignore new shows" selected="@{m_presenter.settings.ignoreNewShows}"/>
-							</s:HGroup>
-							<s:HGroup  verticalAlign="middle">
-								<s:Label text="Source path:" width="80"/>
-								<s:TextInput id="inputDir"  text="@{m_presenter.inputDir}" width="100%"/>
-							</s:HGroup>
-							<mx:Spacer height="10"/>
-							<s:HGroup verticalAlign="middle">
-								<s:Label text="Target path:" width="80"/>
-								<s:TextInput id="targetBase" text="@{m_presenter.settings.outputDir}" width="100%"/>
-							</s:HGroup>
-						</s:BorderContainer>
-						<s:HGroup horizontalAlign="center" width="100%">
-							<s:Button label="Scan" click="{m_presenter.scanDirectory()}"/>
+						<s:VGroup gap="-4" width="100%">
+							<s:BorderContainer skinClass="view.defaultView.skin.containerWithHeader.ContainerHeader" width="100%" height="38">
+								<s:Label text="Settings"/>
+							</s:BorderContainer>
+							<s:BorderContainer enabled="{pendingList.selectedItem!=null}" skinClass="view.defaultView.skin.containerWithHeader.ContainerBody" width="100%">
+								<s:layout>
+									<s:VerticalLayout paddingLeft="15" paddingRight="15" paddingTop="15" paddingBottom="15"/>
+								</s:layout>
+								<s:HGroup>
+									<s:CheckBox label="Recursive" selected="@{m_presenter.recursiveScan}"/>
+									<s:CheckBox label="Ignore new shows" selected="@{m_presenter.settings.ignoreNewShows}"/>
+								</s:HGroup>
+								<s:HGroup  verticalAlign="middle">
+									<s:Label text="Source path:" width="80"/>
+									<s:TextInput id="inputDir"  text="@{m_presenter.inputDir}" width="100%"/>
+								</s:HGroup>
+								<mx:Spacer height="10"/>
+								<s:HGroup verticalAlign="middle">
+									<s:Label text="Target path:" width="80"/>
+									<s:TextInput id="targetBase" text="@{m_presenter.settings.outputDir}" width="100%"/>
+								</s:HGroup>
+							</s:BorderContainer>
+						</s:VGroup>
+						<s:HGroup horizontalAlign="right" width="100%">
+							<s:Button buttonMode="true" label="SCAN" width="108" height="38" click="{m_presenter.scanDirectory()}"  skinClass="view.defaultView.skin.ButtonSkin1"/>
 						</s:HGroup>
 						<mx:Spacer height="10"/>
-						<skin:GroupTitle id="editingLabel" label="Select shows to edit info" on="true" visible="{pendingList.dataProvider.length>0}" includeInLayout="{pendingList.dataProvider.length>0}"/>
-						<s:BorderContainer enabled="{pendingList.selectedItem!=null}" visible="{editingLabel.visible}" includeInLayout="{editingLabel.on}" styleName="appBackground" borderColor="0x000000" borderAlpha="1" cornerRadius="10" width="100%">
-							<s:layout>
-								<s:VerticalLayout paddingLeft="15" paddingRight="15" paddingTop="15" paddingBottom="15"/>
-							</s:layout>
-							<s:HGroup width="221" right="0" verticalAlign="middle">
-								<s:Label text="Name:" height="21" width="70"/>
-								<s:TextInput id="mediaName" text="@{m_presenter.mediaName}"/>
-							</s:HGroup>
-							<s:HGroup width="221" right="0" verticalAlign="middle">
-								<s:Label height="21" text="Season:" width="69"/>
-								<s:TextInput id="seasonInput" text="@{m_presenter.season}"/>
-							</s:HGroup>
-							<s:HGroup width="100%">
-								<s:Label id="targetFolder" text="{m_presenter.targetPath}"/>
-							</s:HGroup>
-							<mx:Spacer height="20"/>
-							<s:CheckBox label="Remember this decision" toolTip="The file name schema you modified will be stored and the changes you applied will be automatically applied next time" enabled="false"/>
-							<s:HGroup>
-								<s:Button label="Apply to selection" click="{m_presenter.applyModificationToSelection(pendingList.selectedItems); pendingList.dataGroup.invalidateDisplayList();}"/>
-								<s:Button label="Remove selection" click="{m_presenter.removeFromPendingList(pendingList.selectedItems);pendingList.dataGroup.invalidateDisplayList();}"/>
-							</s:HGroup>
-						</s:BorderContainer>
+						<s:VGroup gap="-4" width="100%">
+							<s:BorderContainer skinClass="view.defaultView.skin.containerWithHeader.ContainerHeader" width="100%" height="38">
+								<s:Label text="Select shows to edit info"/>
+							</s:BorderContainer>
+							<s:BorderContainer enabled="{pendingList.selectedItem!=null}" skinClass="view.defaultView.skin.containerWithHeader.ContainerBody" width="100%">
+								<s:layout>
+									<s:VerticalLayout paddingLeft="15" paddingRight="15" paddingTop="15" paddingBottom="15"/>
+								</s:layout>
+								<s:HGroup width="221" right="0" verticalAlign="middle">
+									<s:Label text="Name:" height="21" width="70"/>
+									<s:TextInput id="mediaName" text="@{m_presenter.mediaName}"/>
+								</s:HGroup>
+								<s:HGroup width="221" right="0" verticalAlign="middle">
+									<s:Label height="21" text="Season:" width="69"/>
+									<s:TextInput id="seasonInput" text="@{m_presenter.season}"/>
+								</s:HGroup>
+								<s:HGroup width="100%">
+									<s:Label id="targetFolder" text="{m_presenter.targetPath}"/>
+								</s:HGroup>
+								<mx:Spacer height="20"/>
+								<s:CheckBox label="Remember this decision" toolTip="The file name schema you modified will be stored and the changes you applied will be automatically applied next time" enabled="false"/>
+								<s:HGroup>
+									<s:Button label="Apply to selection" click="{m_presenter.applyModificationToSelection(pendingList.selectedItems); pendingList.dataGroup.invalidateDisplayList();}"/>
+									<s:Button label="Remove selection" click="{m_presenter.removeFromPendingList(pendingList.selectedItems);pendingList.dataGroup.invalidateDisplayList();}"/>
+								</s:HGroup>
+							</s:BorderContainer>
+						</s:VGroup>
 						<mx:Spacer height="20"/>
-						<s:HGroup horizontalAlign="center" width="100%">
-							<s:Button label="Move!" click="{m_presenter.moveNextFile();}"/>
+						<s:HGroup horizontalAlign="right" width="100%">
+							<s:Button buttonMode="true" label="MOVE!" width="108" height="38" click="{m_presenter.moveNextFile();}" skinClass="view.defaultView.skin.ButtonSkin1"/>
 						</s:HGroup>
 					</s:VGroup>
 

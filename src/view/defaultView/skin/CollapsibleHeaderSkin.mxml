@@ -28,44 +28,37 @@
         /**
          * @copy spark.skins.spark.ApplicationSkin#hostComponent
          */
-        [HostComponent("view.defaultView.skin.CollapsibleGroup")]
-
-
+        [HostComponent("spark.components.SkinnableContainer")]
     ]]>
     </fx:Metadata>
-
-	<fx:Script>
-		<![CDATA[
-			override protected function stateChanged(oldState:String, newState:String, recursive:Boolean):void
-			{
-				super.stateChanged(oldState, newState, recursive);
-			}
-		]]>
-	</fx:Script>
-
-
 
     <s:states>
         <s:State name="normal" />
         <s:State name="disabled" />
-		<s:State name="expanded" />
+        <s:State name="expanded" />
     </s:states>
-	<s:layout>
-		<s:VerticalLayout gap="0"/>
-	</s:layout>
-	<s:SkinnableContainer  id="clickContainer" width="100%" height="37"  buttonMode="true" skinClass="view.defaultView.skin.CollapsibleHeaderSkin">
-		<s:layout>
-			<s:VerticalLayout verticalAlign="middle"/>
-		</s:layout>
-		<s:Label id="label" styleName="buttonLabel" verticalAlign="middle"/>
-	</s:SkinnableContainer>
 
-	<s:Group id="contentGroup" width="100%" top="0" bottom="0" minWidth="0" minHeight="0" includeIn="expanded">
-		<s:layout>
-			<s:VerticalLayout/>
-		</s:layout>
-	</s:Group>
+	<s:Rect left="0" right="0" top="0" bottom="0" includeIn="normal" >
+		<s:fill>
+			<s:SolidColor color="0xF6A335"/>
+		</s:fill>
+	</s:Rect>
+	<s:Rect left="0" right="0" top="0" bottom="0" includeIn="expanded">
+		<s:fill>
+			<s:SolidColor color="0xF6A335"/>
+		</s:fill>
+	</s:Rect>
 
-
+    <!--
+        Note: setting the minimum size to 0 here so that changes to the host component's
+        size will not be thwarted by this skin part's minimum size.   This is a compromise,
+        more about it here: http://bugs.adobe.com/jira/browse/SDK-21143
+    -->
+    <!--- @copy spark.components.SkinnableContainer#contentGroup -->
+    <s:Group id="contentGroup" left="0" right="0" top="0" bottom="0" minWidth="0" minHeight="0">
+        <s:layout>
+            <s:BasicLayout/>
+        </s:layout>
+    </s:Group>
 
 </s:Skin>

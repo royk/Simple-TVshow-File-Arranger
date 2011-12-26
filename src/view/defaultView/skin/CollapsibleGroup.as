@@ -6,8 +6,10 @@ package view.defaultView.skin
 	import mx.states.State;
 
 	import spark.components.BorderContainer;
+	import spark.components.Group;
 	import spark.components.Label;
 	import spark.components.SkinnableContainer;
+	import spark.primitives.Rect;
 
 	[SkinState("normal")]
 	[SkinState("disabled")]
@@ -19,7 +21,7 @@ package view.defaultView.skin
 		public var label:Label;
 
 		[SkinPart(required="true")]
-		public var clickContainer:BorderContainer;
+		public var clickContainer:SkinnableContainer;
 
 		private var m_collapsedText:String;
 		private var m_expandedText:String;

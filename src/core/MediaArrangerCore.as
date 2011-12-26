@@ -9,11 +9,11 @@ package core
 	import core.settings.Settings;
 	import core.settings.SettingsLoader;
 	import core.utils.StringUtils;
-	
+
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.filesystem.File;
-	
+
 	import mx.utils.StringUtil;
 
 	public class MediaArrangerCore extends EventDispatcher
@@ -41,7 +41,7 @@ package core
 		{
 			return m_settings;
 		}
-		
+
 		public function get showsDBAvailable():Boolean
 		{
 			return m_showsDB && m_showsDB.ready;
@@ -93,10 +93,11 @@ package core
 		public function processShow(fileName:String, episodeInfo:Object):Show
 		{
 			var show:Show = new Show();
-			show.status = "OK";
+			show.status = "Unable to extract show from file.";
 			var showNameRegex:Object = RegExpLibrary.TV_SHOW_NAME.exec(fileName);
 			if (showNameRegex)
 			{
+				show.status = "OK";
 				if (episodeInfo.length>2)
 				{
 					var season:String 	= episodeInfo[1];
@@ -145,7 +146,7 @@ package core
 					}
 					else
 					{
-						show.status = "Unable to extract show from file."; 
+						show.status = "Unable to extract show from file.";
 					}
 				}
 			}

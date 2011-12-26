@@ -1,24 +1,26 @@
-package view.utils
+package com.poisontaffy.libs.flex4
 {
 	import flash.events.Event;
 
-	import mx.controls.TextInput;
 	import mx.core.UIComponent;
-	import mx.events.FlexEvent;
 	import mx.events.PropertyChangeEvent;
 
 	import spark.components.CheckBox;
 	import spark.components.RichEditableText;
 	import spark.components.TextArea;
+	import spark.components.TextInput;
 	import spark.events.TextOperationEvent;
 
 	/**
-	 * Contains all ugly hacks required for the desired behavior of the app views.
+	 * Utils and hacks for Flex 4 components
+	 * @author Roy Klein
+	 *
 	 */
-	public class ViewUtils
+	public class PTFlex4Utils
 	{
 		/**
 		 * Causes all components under root to rebind by pretending they're changed
+		 * Right now works only with Spark components.
 		 * @root the base DisplayObject that is the direct or indirect parent of all the components you wish to rebind
 		 */
 		public function triggerComponentBindings(root:UIComponent):void
@@ -48,8 +50,8 @@ package view.utils
 		}
 
 		/**
-		 * Scrolls a text area to the bottom, so the most up to date text is visible
-		 *
+		 * Scrolls a Spark text area to the bottom, so the most up to date text is visible
+		 * @field the S:TextArea to scroll to the bottom of
 		 */
 		public function scrollToBottom(field:TextArea):void
 		{
@@ -66,7 +68,6 @@ package view.utils
 			{
 				field.removeEventListener(Event.ENTER_FRAME, updateScroll);
 				field.scrollToRange(int.MAX_VALUE);
-//				field.scroller.verticalScrollBar.value = field.scroller.verticalScrollBar.maximum + 10;
 			}
 		}
 	}

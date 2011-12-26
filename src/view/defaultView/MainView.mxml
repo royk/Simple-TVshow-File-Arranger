@@ -6,6 +6,8 @@
 		 implements="view.IMainView" xmlns:skin="view.defaultView.skin.*" styleName="">
 	<fx:Script>
 		<![CDATA[
+			import com.poisontaffy.libs.flex4.PTFlex4Utils;
+
 			import flash.utils.setTimeout;
 
 			import mx.core.UIComponent;
@@ -28,10 +30,9 @@
 			import view.defaultView.skin.ListInnerContainerSkin;
 			import view.defaultView.skin.TextInput1;
 			import view.defaultView.skin.containerWithHeader.ContainerHeader;
-			import view.utils.ViewUtils;
 			[Bindable]
 			private var m_presenter:MainPresenter;
-			private var m_utils:ViewUtils = new ViewUtils();
+			private var m_utils:PTFlex4Utils = new PTFlex4Utils();
 
 			public function setAppArguments(value:Array):void
 			{
@@ -157,8 +158,8 @@
 							</s:HGroup>
 							<s:CheckBox buttonMode="true" label="Remember this decision" toolTip="The file name schema you modified will be stored and the changes you applied will be automatically applied next time" enabled="false"/>
 							<s:HGroup width="100%">
-								<s:Button label="Apply to selection" click="{m_presenter.applyModificationToSelection(pendingList.selectedItems); pendingList.dataGroup.invalidateDisplayList();}" skinClass="view.defaultView.skin.ButtonSkin2" width="100%" height="32" />
-								<s:Button label="Remove selection" click="{m_presenter.removeFromPendingList(pendingList.selectedItems);pendingList.dataGroup.invalidateDisplayList();}" skinClass="view.defaultView.skin.ButtonSkin2" width="100%" height="32"/>
+								<s:Button label="Apply to selection" click="{m_presenter.applyModificationToSelection(pendingList.selectedItems); pendingList.dataGroup.invalidateDisplayList();}" skinClass="view.defaultView.skin.ButtonSkin2" width="100%" height="32" buttonMode="true" />
+								<s:Button label="Remove selection" click="{m_presenter.removeFromPendingList(pendingList.selectedItems);pendingList.dataGroup.invalidateDisplayList();}" skinClass="view.defaultView.skin.ButtonSkin2" width="100%" height="32" buttonMode="true"/>
 							</s:HGroup>
 						</s:SkinnableContainer>
 					</s:VGroup>

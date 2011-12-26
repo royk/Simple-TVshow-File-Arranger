@@ -24,6 +24,7 @@ package presenter
 
 	public class MainPresenter extends EventDispatcher implements IFileIOObserver
 	{
+		private var m_parallelMoves:int = 0;
 		private var tv_location:String = "c:\\shows";
 		private var i:int = 0;
 		private var m_core:MediaArrangerCore = new MediaArrangerCore();
@@ -268,33 +269,48 @@ package presenter
 		{
 			if (pendingFiles.length>0)
 			{
+
+				m_view.disableUI();
+				m_view.showLog();
+				if (m_parallelMoves==0)
+				{
+					writeLog("Starting files move.");
+				}
 				var data:Object = pendingFiles.getItemAt(0);
 				(pendingFiles as ArrayList).removeItem(data);
-				writeLog("Moving "+data.file.name);
 				m_core.moveFiles(data.file.nativePath, data.location.nativePath, this);
-			}
-			else
-			{
-				// moved all files
-				writeLog("Done");
-				dispatchEvent(new Event(Event.COMPLETE));
+				m_parallelMoves++;
+				moveNextFile();
 			}
 		}
 
 		// IFileIOObserver functions
 		public function moveSuccess():void
 		{
-			writeLog("\tMove succeeded");
-			moveNextFile();
+			trace("moveSuccess");
+			writeLog("Moved file. Files left: "+(m_parallelMoves-1));
+			checkIfMoveDone();
 		}
 
 		public function moveError(failedFile:String, reason:String):void
 		{
+			trace("moveError");
 			writeLog("\tFailed moving: "+failedFile+". "+reason);
-			moveNextFile();
+			checkIfMoveDone();
 		}
 		// END IFileIOObserver functions
 
+		private function checkIfMoveDone():void
+		{
+			m_parallelMoves--;
+			if (m_parallelMoves==0)
+			{
+				m_view.enableUI();
+				// moved all files
+				writeLog("File moving done.");
+				dispatchEvent(new Event(Event.COMPLETE));
+			}
+		}
 
 		public function fillModificationDataFromSelection(selectedItems:Vector.<Object>):void
 		{

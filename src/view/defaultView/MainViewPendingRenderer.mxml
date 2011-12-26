@@ -22,7 +22,6 @@
 				var style:Array = [0xf0f0f0, 0xffffff];
 				styleManager.getColorNames(style);
 				var ret:uint = style[itemIndex % style.length];
-				trace(itemIndex, itemIndex % style.length, ret);
 				return ret;
 			}
 

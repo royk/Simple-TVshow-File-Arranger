@@ -4,6 +4,7 @@ package view.utils
 
 	import mx.controls.TextInput;
 	import mx.core.UIComponent;
+	import mx.events.FlexEvent;
 	import mx.events.PropertyChangeEvent;
 
 	import spark.components.CheckBox;
@@ -64,7 +65,8 @@ package view.utils
 			if (field)
 			{
 				field.removeEventListener(Event.ENTER_FRAME, updateScroll);
-				field.scroller.verticalScrollBar.value = field.scroller.verticalScrollBar.maximum;
+				field.scrollToRange(int.MAX_VALUE);
+//				field.scroller.verticalScrollBar.value = field.scroller.verticalScrollBar.maximum + 10;
 			}
 		}
 	}

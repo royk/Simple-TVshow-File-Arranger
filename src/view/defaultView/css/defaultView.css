@@ -2,17 +2,13 @@
 @namespace s "library://ns.adobe.com/flex/spark";
 @namespace mx "library://ns.adobe.com/flex/mx";
 
-.logoFont
-{
-	fontSize: 15;
-	color: #9933FF;
-	fontStyle: italic;
-	fontWeight: bold;
-}
 
-.subLogoFont
+@font-face
 {
-	fontSize: 15;
+	font-family: MyFont;
+	src: url("assets/MgOpenModataBold.ttf");
+	embedAsCFF: true;
+	font-weight:normal;
 }
 
 .appBackground
@@ -22,7 +18,36 @@
 
 .buttonLabel
 {
-	color: #FFFFFF;
-	fontSize: 15;
-	fontWeight: bold;
+	font-size: 18px;
+	font-family: MyFont;
+	color:#FFFFFF;
+}
+
+.headerLabel
+{
+	font-size: 14px;
+}
+
+s|Label
+{
+	font-family: MyFont;
+	color: #4A4A4A
+}
+s|TextInput
+{
+	skin-class: ClassReference("view.defaultView.skin.TextInput1");
+}
+
+s|TextArea
+{
+	skin-class: ClassReference("view.defaultView.skin.TextAreaSkin1");
+}
+
+s|CheckBox
+{
+	skin-class: ClassReference("view.defaultView.skin.CheckBoxSkin1");
+}
+s|List
+{
+	skin-class: ClassReference("view.defaultView.skin.ListSkin1");
 }

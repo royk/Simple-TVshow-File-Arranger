@@ -14,6 +14,7 @@
 			}
 		]]>
 	</fx:Script>
+	<fx:Style source="/view/defaultView/css/defaultView.css"/>
 <defaultView:MainView id="view">
 
 </defaultView:MainView>

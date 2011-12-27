@@ -3,7 +3,7 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 xmlns:mx="library://ns.adobe.com/flex/mx" height="100%" width="100%"
 		 creationComplete="windowedapplication1_creationCompleteHandler(event)"
-		 implements="view.IMainView" xmlns:skin="view.defaultView.skin.*" styleName="">
+		 implements="view.IMainView" xmlns:skin="view.defaultView.skin.*" styleName="" xmlns:components="view.defaultView.components.*">
 	<fx:Script>
 		<![CDATA[
 			import com.poisontaffy.libs.flex4.PTFlex4Utils;
@@ -28,6 +28,7 @@
 			import view.defaultView.skin.CollapsibleGroupSkin;
 			import view.defaultView.skin.ListContainerSkin;
 			import view.defaultView.skin.ListInnerContainerSkin;
+			import view.defaultView.skin.TextAreaSkin2;
 			import view.defaultView.skin.TextInput1;
 			import view.defaultView.skin.containerWithHeader.ContainerHeader;
 			[Bindable]
@@ -113,7 +114,7 @@
 				<s:VGroup id="leftControls" width="100%" height="100%">
 					<s:VGroup gap="-4" width="100%" >
 						<s:SkinnableContainer skinClass="view.defaultView.skin.containerWithHeader.ContainerHeader" width="100%" height="38">
-							<s:Label text="Settings" styleName="headerLabel"/>
+							<s:Label text="Shows Finding Settings" styleName="headerLabel"/>
 						</s:SkinnableContainer>
 						<s:SkinnableContainer skinClass="view.defaultView.skin.containerWithHeader.ContainerBody" width="100%">
 							<s:layout>
@@ -137,12 +138,12 @@
 						</s:SkinnableContainer>
 					</s:VGroup>
 					<s:HGroup horizontalAlign="right" width="100%">
-						<s:Button buttonMode="true" label="SCAN" width="108" height="38" click="{m_presenter.scanDirectory()}"  skinClass="view.defaultView.skin.ButtonSkin1"/>
+						<s:Button buttonMode="true" label="FIND" width="108" height="38" click="{m_presenter.scanDirectory()}"  skinClass="view.defaultView.skin.ButtonSkin1"/>
 					</s:HGroup>
 					<mx:Spacer height="10"/>
 					<s:VGroup gap="-4" width="100%">
 						<s:SkinnableContainer skinClass="view.defaultView.skin.containerWithHeader.ContainerHeader" width="100%" height="38">
-							<s:Label text="Select shows to edit info" styleName="headerLabel"/>
+							<s:Label text="Select shows to modify" styleName="headerLabel"/>
 						</s:SkinnableContainer>
 						<s:SkinnableContainer enabled="{pendingList.selectedItem!=null}" skinClass="view.defaultView.skin.containerWithHeader.ContainerBody" width="100%">
 							<s:layout>
@@ -158,8 +159,8 @@
 							</s:HGroup>
 							<s:CheckBox buttonMode="true" label="Remember this decision" toolTip="The file name schema you modified will be stored and the changes you applied will be automatically applied next time" enabled="false"/>
 							<s:HGroup width="100%">
-								<s:Button label="Apply to selection" click="{m_presenter.applyModificationToSelection(pendingList.selectedItems); pendingList.dataGroup.invalidateDisplayList();}" skinClass="view.defaultView.skin.ButtonSkin2" width="100%" height="32" buttonMode="true" />
-								<s:Button label="Remove selection" click="{m_presenter.removeFromPendingList(pendingList.selectedItems);pendingList.dataGroup.invalidateDisplayList();}" skinClass="view.defaultView.skin.ButtonSkin2" width="100%" height="32" buttonMode="true"/>
+								<components:IconButton label="Apply to selection" icon="assets/check-v.png" click="{m_presenter.applyModificationToSelection(pendingList.selectedItems); pendingList.dataGroup.invalidateDisplayList();}" skinClass="view.defaultView.skin.ButtonSkin2" width="100%" height="32" buttonMode="true" />
+								<components:IconButton label="Remove selection" icon="assets/check-x.png" click="{m_presenter.removeFromPendingList(pendingList.selectedItems);pendingList.dataGroup.invalidateDisplayList();}" skinClass="view.defaultView.skin.ButtonSkin2" width="100%" height="32" buttonMode="true"/>
 							</s:HGroup>
 						</s:SkinnableContainer>
 					</s:VGroup>
@@ -171,10 +172,10 @@
 			</s:VGroup>
 			<s:SkinnableContainer skinClass="view.defaultView.skin.ListContainerSkin" width="100%" height="100%" >
 				<s:SkinnableContainer skinClass="view.defaultView.skin.ListInnerContainerSkin" filters="{[areaFilter]}" width="100%" height="100%">
-					<s:List id="pendingList" dataProvider="{m_presenter.pendingFiles}" change="{m_presenter.fillModificationDataFromSelection(pendingList.selectedItems)}"  allowMultipleSelection="true" itemRenderer="view.defaultView.MainViewPendingRenderer" width="100%" height="100%"/>
-					<skin:CollapsibleGroup  skinClass="view.defaultView.skin.CollapsibleGroupSkin"  width="100%" collapsedText=" + Log" expandedText=" - Log" id="logContainer">
-						<s:TextArea id="log" text="{m_presenter.log}" width="100%" editable="false" valueCommit="log_valueCommitHandler(event)" />
-					</skin:CollapsibleGroup>
+					<s:List id="pendingList" dataProvider="{m_presenter.pendingFiles}" change="{m_presenter.fillModificationDataFromSelection(pendingList.selectedItems)}"  allowMultipleSelection="true" itemRenderer="view.defaultView.skin.PendingListItemRenderer" width="100%" height="100%" stateChangeComplete="{m_utils.scrollToBottom(log)}"/>
+					<components:CollapsibleGroup  skinClass="view.defaultView.skin.CollapsibleGroupSkin"  width="100%" collapsedText=" + Log" expandedText=" - Log" id="logContainer">
+						<s:TextArea id="log" text="{m_presenter.log}" width="100%" editable="false" valueCommit="log_valueCommitHandler(event)" skinClass="view.defaultView.skin.TextAreaSkin2"/>
+					</components:CollapsibleGroup>
 				</s:SkinnableContainer>
 			</s:SkinnableContainer>
 		</s:Group>

@@ -31,13 +31,17 @@
 	</fx:Script>
 
     <s:states>
-		<s:State name="up"/>
-		<s:State name="over"/>
+		<s:State name="up" stateGroups="notDown"/>
+		<s:State name="over"  stateGroups="notDown"/>
 		<s:State name="down"/>
-		<s:State name="disabled"/>
+		<s:State name="disabled"  stateGroups="notDown"/>
     </s:states>
 
-	<s:BorderContainer width="100%" height="100%" borderColor="0xFAA43A" borderAlpha="1" cornerRadius="8" backgroundColor="0xFAA43A" filters="{[new spark.filters.DropShadowFilter(4, 90, 0xDD8851, 1, 4, 4, 1, 1)]}">
+	<s:BorderContainer top.notDown="0" bottom.notDown="0" width="100%" borderColor="0xFAA43A" borderAlpha="1" cornerRadius="8" backgroundColor="0xFAA43A"
+					   filters.notDown="{[new spark.filters.DropShadowFilter(4, 90, 0xDD8851, 1, 4, 4, 1, 1)]}"
+					   top.down="2"
+					   bottom.down="-2"
+					   filters.down="{[new spark.filters.DropShadowFilter(3, 90, 0xDD8851, 1, 4, 4, 1, 1)]}">
 		<s:layout>
 			<s:HorizontalLayout verticalAlign="middle" horizontalAlign="center"/>
 		</s:layout>

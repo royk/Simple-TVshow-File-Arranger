@@ -5,8 +5,16 @@
 
 @font-face
 {
-	font-family: MyFont;
+	font-family: MyFontBold;
 	src: url("assets/MgOpenModataBold.ttf");
+	embedAsCFF: true;
+	font-weight:normal;
+}
+
+@font-face
+{
+	font-family: MyFont;
+	src: url("assets/MgOpenModataRegular.ttf");
 	embedAsCFF: true;
 	font-weight:normal;
 }
@@ -19,7 +27,7 @@
 .buttonLabel
 {
 	font-size: 18px;
-	font-family: MyFont;
+	font-family: MyFontBold;
 	color:#FFFFFF;
 }
 

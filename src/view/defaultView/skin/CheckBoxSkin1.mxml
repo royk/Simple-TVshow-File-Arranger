@@ -43,7 +43,7 @@
         override public function get colorizeExclusions():Array {return exclusions;}
 
         /* Define the symbol fill items that should be colored by the "symbolColor" style. */
-        static private const symbols:Array = ["checkMarkFill"];
+        static private const symbols:Array = [];
 
        /**
         * @private
@@ -55,7 +55,6 @@
          */
         override protected function initializationComplete():void
         {
-			setStyle("symbolColor", "0xF6A335");
             useChromeColor = true;
             super.initializationComplete();
         }
@@ -101,19 +100,16 @@
 		</s:Rect>
         <!-- checkmark -->
         <!--- The checkmark in the box for this skin. To create a custom check mark, create a custom skin class. -->
-        <s:Path left="2" top="0" includeIn="selectedStates" id="check" itemCreationPolicy="immediate"
+        <!--<s:Path left="2" top="0" includeIn="selectedStates" id="check" itemCreationPolicy="immediate"
                 data="M54.75 35.75 57 38 37 57 26 44 28.6 41.75 37.5 53.1 54.75 35.75">
 			<s:stroke>
 				<s:SolidColorStroke color="0xF6A335"/>
 			</s:stroke>
             <s:fill>
-                <!---
-                    @private
-                    The solid color fill for the CheckBox's checkmark. The default alpha is .9, and the default fill color is 0x000000.
-                -->
                 <s:SolidColor id="checkMarkFill" color="0xF6A335"  />
             </s:fill>
-        </s:Path>
+        </s:Path>-->
+		<s:BitmapImage top="-5" source="assets/check-v.png" includeIn="selectedStates" id="check" itemCreationPolicy="immediate"/>
     </s:Group>
 
     <!-- Label -->

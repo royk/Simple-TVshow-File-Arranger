@@ -97,11 +97,23 @@ package core
 			var showNameRegex:Object = RegExpLibrary.TV_SHOW_NAME.exec(fileName);
 			if (showNameRegex)
 			{
-				show.status = "OK";
+
 				if (episodeInfo.length>2)
 				{
 					var season:String 	= episodeInfo[1];
 					var episode:String 	= episodeInfo[2];
+					// try to see if season+episode is actually year
+					var yearCandidate:String = season.concat(episode);
+					if (RegExpLibrary.NUMBER_IS_YEAR.exec(yearCandidate))
+					{
+						// see if the file name contains the year
+						if(fileName.indexOf(yearCandidate)!=-1)
+						{
+							// match failed - the show contains year info instead of season/episode.
+							return show;
+						}
+					}
+					show.status = "OK";
 					var name:String 	= fileName.substr(0, fileName.indexOf(episodeInfo[0]));	// just default value, in case regex fails
 					if (showNameRegex)
 					{

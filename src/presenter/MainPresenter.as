@@ -33,8 +33,6 @@ package presenter
 		private var m_currentShow:Show;
 
 		private var m_file:File;
-		private var m_mediaName:String;
-		private var m_season:String;
 		private var m_currentFileName:String;
 		private var m_log:String = "";
 		private var m_targetPath:String = "";
@@ -144,32 +142,6 @@ package presenter
 		public function set inputDir(value:String):void
 		{
 			m_core.settings.inputDir = value;
-		}
-
-		[Bindable]
-		public function get mediaName():String
-		{
-			return m_mediaName;
-		}
-
-		public function set mediaName(value:String):void
-		{
-			m_currentShow.name = value;
-			m_mediaName = value;
-			updateTargetName();
-		}
-
-		[Bindable]
-		public function get season():String
-		{
-			return m_season;
-		}
-
-		public function set season(value:String):void
-		{
-			m_season = value;
-			m_currentShow.season = int(value);
-			updateTargetName();
 		}
 
 		public function parseSettings(args:Array):void
@@ -317,18 +289,24 @@ package presenter
 			if (selectedItems.length)
 			{
 				m_currentShow = selectedItems[0].show;
-				season 			= m_currentShow.season.toString();
-				mediaName 		= m_currentShow.name;
+				m_view.season 		= m_currentShow.season;
+				m_view.showName		= m_currentShow.name;
 				updateTargetName();
 			}
 		}
 
-		public function applyModificationToSelection(selectedItems:Vector.<Object>):void
+		public function applyModificationToSelection(selectedItems:Vector.<Object>, changeName:Boolean, changeSeason:Boolean):void
 		{
 			for each (var o:Object in selectedItems)
 			{
-				(o.show as Show).name = mediaName;
-				(o.show as Show).season = int(season);
+				if (changeName)
+				{
+					(o.show as Show).name = m_view.showName;
+				}
+				if (changeSeason)
+				{
+					(o.show as Show).season = m_view.season;
+				}
 				o.location = new File(getTargetName(o.show));
 				o.label = o.location.nativePath;
 				m_movementStack.itemUpdated(o);
@@ -370,8 +348,6 @@ package presenter
 			m_currentShow = show;
 			m_currentShow.originalName = show.name;
 			applyModifiedShowName();
-			season 			= m_currentShow.season.toString();
-			mediaName 		= m_currentShow.name;
 			updateTargetName();
 		}
 

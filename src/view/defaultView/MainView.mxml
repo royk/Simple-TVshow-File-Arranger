@@ -58,6 +58,26 @@
 				m_utils.scrollToBottom(log);
 			}
 
+			public function get showName():String
+			{
+				return mediaName.text;
+			}
+
+			public function set showName(value:String):void
+			{
+				mediaName.text = value;
+			}
+
+			public function get season():int
+			{
+				return int(seasonInput.text);
+			}
+
+			public function set season(value:int):void
+			{
+				seasonInput.text = value.toString();
+			}
+
 			private function setUIAvailable(value:Boolean):void
 			{
 				pendingList.enabled	 	 = value;
@@ -151,15 +171,17 @@
 							</s:layout>
 							<s:HGroup width="221" right="0" verticalAlign="middle">
 								<s:Label text="Name:" height="21" width="70"/>
-								<s:TextInput id="mediaName" text="@{m_presenter.mediaName}"/>
+								<s:TextInput id="mediaName" text=""/>
+								<s:CheckBox id="applyNameChange"/>
 							</s:HGroup>
 							<s:HGroup width="221" right="0" verticalAlign="middle">
 								<s:Label height="21" text="Season:" width="69"/>
-								<s:TextInput id="seasonInput" text="@{m_presenter.season}"/>
+								<s:TextInput id="seasonInput" text=""/>
+								<s:CheckBox id="applySeasonChange"/>
 							</s:HGroup>
 							<s:CheckBox buttonMode="true" label="Remember this decision" toolTip="The file name schema you modified will be stored and the changes you applied will be automatically applied next time" enabled="false"/>
 							<s:HGroup width="100%">
-								<components:IconButton label="Apply to selection" icon="assets/check-v.png" click="{m_presenter.applyModificationToSelection(pendingList.selectedItems); pendingList.dataGroup.invalidateDisplayList();}" skinClass="view.defaultView.skin.ButtonSkin2" width="100%" height="32" buttonMode="true" />
+								<components:IconButton label="Apply to selection" icon="assets/check-v.png" click="{m_presenter.applyModificationToSelection(pendingList.selectedItems, applyNameChange.selected, applySeasonChange.selected); pendingList.dataGroup.invalidateDisplayList();}" skinClass="view.defaultView.skin.ButtonSkin2" width="100%" height="32" buttonMode="true" />
 								<components:IconButton label="Remove selection" icon="assets/check-x.png" click="{m_presenter.removeFromPendingList(pendingList.selectedItems);pendingList.dataGroup.invalidateDisplayList();}" skinClass="view.defaultView.skin.ButtonSkin2" width="100%" height="32" buttonMode="true"/>
 							</s:HGroup>
 						</s:SkinnableContainer>

@@ -219,7 +219,7 @@ package core
 					var parts:Array = showName.split(" ");
 					if (parts.length>1)
 					{
-						// try initial matching
+						// try initials matching
 						showName = "";
 						for (j=0; j<parts.length; j++)
 						{

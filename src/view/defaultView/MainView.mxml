@@ -37,8 +37,8 @@
 
 			public function setAppArguments(value:Array):void
 			{
-				m_presenter.parseSettings(value);
 				m_presenter.init();
+				m_presenter.parseSettings(value);
 				m_utils.triggerComponentBindings(this);
 			}
 
@@ -130,7 +130,11 @@
 				<s:HorizontalLayout  gap="20"/>
 			</s:layout>
 			<s:VGroup width="357" height="100%" paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
-				<s:BitmapImage source="assets/logo.png"/>
+				<s:HGroup>
+					<s:BitmapImage source="assets/logo.png"/>
+					<s:Label text="Beta" styleName="headerLabel"/>
+
+				</s:HGroup>
 				<s:VGroup id="leftControls" width="100%" height="100%">
 					<s:VGroup gap="-4" width="100%" >
 						<s:SkinnableContainer skinClass="view.defaultView.skin.containerWithHeader.ContainerHeader" width="100%" height="38">

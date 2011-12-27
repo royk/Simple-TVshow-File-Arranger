@@ -33,7 +33,9 @@
 
 .headerLabel
 {
+	font-family: MyFontBold;
 	font-size: 14px;
+	color:#FAA43A;
 }
 
 s|Label

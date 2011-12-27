@@ -8,5 +8,6 @@ package core.mediaInfo
 		public var season			:int 	= 0;
 		public var episode			:int 	= 0;
 		public var status			:String		= "OK";
+		public var isNew			:Boolean = false;
 	}
 }

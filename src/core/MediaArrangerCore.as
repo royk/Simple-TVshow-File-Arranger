@@ -169,9 +169,15 @@ package core
 					{
 						name = dbMatch;
 					}
+					// if conntected to db but no match from db, mark show as new.
+
 					if (name)
 					{
 						show = new Show();
+						if (m_showsDB.getShows().length!=0 && dbMatch=="")
+						{
+							show.isNew = true;
+						}
 						show.fileName 	= fileName;
 						show.name 		= name;
 						show.episode 	= Number(RegExpLibrary.TV_EPISODE_NUMBER.exec(episode)[1]);

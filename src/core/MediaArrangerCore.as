@@ -49,6 +49,8 @@ package core
 
 		public function extractEpisodeInfo(fileName:String):Object
 		{
+			// remove year info before matching
+			fileName = fileName.replace(RegExpLibrary.NUMBER_IS_YEAR, "");
 			return RegExpLibrary.TV_EPISODE_INFO.exec(fileName);
 		}
 
@@ -94,6 +96,7 @@ package core
 		{
 			var show:Show = new Show();
 			show.status = "Unable to extract show from file.";
+
 			var showNameRegex:Object = RegExpLibrary.TV_SHOW_NAME.exec(fileName);
 			if (showNameRegex)
 			{
@@ -103,17 +106,6 @@ package core
 					var season:String 	= episodeInfo[1];
 					var episode:String 	= episodeInfo[2];
 
-					// try to see if season+episode is actually year
-					var seasonEpisode:String = season.concat(episode);
-					if (RegExpLibrary.NUMBER_IS_YEAR.exec(seasonEpisode))
-					{
-						// see if the file name contains the year
-						if(fileName.indexOf(seasonEpisode)!=-1)
-						{
-							// match failed - the show contains year info instead of season/episode.
-							return show;
-						}
-					}
 					// if season + episode is a three number string, we need to decide which is which.
 					// assume that episode is up to 20 (not sure if there's a rule for how many episodes there are in a season)
 					// and that if episode is under 20, then season must be a smaller number.

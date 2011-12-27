@@ -9,8 +9,9 @@ package core
 		static public const TV_EPISODE_NUMBER:RegExp 	= /e?0?(\d+)/i;
 		static public const TV_SEASON_NUMBER:RegExp 	= /s?0?(\d+)/i;
 
-		// Matching elimination
+		// Matching helpers
 		static public const NUMBER_IS_YEAR:RegExp		= /(19|20)\d\d/;
+
 
 		// General Purpose
 		static public const NAME_SEPARATOR:RegExp	= /\s*[-]\s*$/;

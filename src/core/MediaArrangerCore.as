@@ -225,7 +225,7 @@ package core
 						{
 							showName += (parts[j] as String).charAt(0);
 						}
-						if (showName==name)
+						if (showName.toLowerCase()==name.toLowerCase())
 						{
 							// matched initials
 							return showNames[i];

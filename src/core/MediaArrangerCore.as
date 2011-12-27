@@ -142,6 +142,7 @@ package core
 					name = StringUtils.globalReplace(name, "_", " ");
 					name = StringUtils.globalReplace(name, ".", " ");
 					name = name.replace(RegExpLibrary.NAME_SEPARATOR, "");
+					name = StringUtils.globalReplace(name, "-", " ");
 					name = StringUtils.capitalizeWords(name);
 					name = StringUtil.trim(name);
 					var dbMatch:String = "";
@@ -150,6 +151,11 @@ package core
 					{
 						// Try adding "the " to name (i.e. "big bang theory" will be matched with "the bing bang theory")
 						dbMatch = matchNameToDB("The "+name, fileName);
+						if (dbMatch=="")
+						{
+							// try removing numbers from name (i.e. Family Guy1 will be matched with Family Guy)
+							dbMatch = matchNameToDB(name.replace(RegExpLibrary.NUMBER_TRIM, ""), fileName);
+						}
 					}
 					if (dbMatch=="")
 					{

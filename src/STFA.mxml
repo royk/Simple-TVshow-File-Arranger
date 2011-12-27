@@ -3,7 +3,7 @@
 					   xmlns:s="library://ns.adobe.com/flex/spark"
 					   xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:defaultView="view.defaultView.*"
 					   width="800"
-					   height="600" minWidth="531" minHeight="565"
+					   height="600" minWidth="531" minHeight="577"
 					   invoke="windowedapplication1_invokeHandler(event)" resize="windowedapplication1_resizeHandler(event)">
 	<fx:Script>
 		<![CDATA[

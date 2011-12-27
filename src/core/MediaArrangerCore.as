@@ -173,6 +173,9 @@ package core
 
 					if (name)
 					{
+						// santize show name so it includes only file system legal characters
+						// (to do: improve sanitation..)
+						name = name.replace(RegExpLibrary.SYMBOLS_TRIM, "");
 						show = new Show();
 						if (m_showsDB.getShows().length!=0 && dbMatch=="")
 						{
@@ -210,43 +213,73 @@ package core
 			{
 				var i			:int;
 				var j			:int;
+				var k			:int;
+				var nameAlternatives	:Array;
 				var showName	:String;
+				var origNameParts:Array
 				// try matching initials if the name is multiword, or partial match for a single word show name
 				// (i.e. "Family Guy" will try to match "FG", "Dexter" will try to match "DEX")
 				for (i=0; i<showNames.length; i++)
 				{
-					showName = showNames[i];
-					var parts:Array = showName.split(" ");
-					if (parts.length>1)
+					nameAlternatives = [showNames[i]];
+					// see if we can match by trimming symbols from showName in db
+					nameAlternatives.push(showNames[i].replace(RegExpLibrary.SYMBOLS_TRIM, ""));
+					for (k=0; k<nameAlternatives.length; k++)
 					{
-						// try initials matching
-						showName = "";
-						for (j=0; j<parts.length; j++)
+						showName = nameAlternatives[k];
+						var parts:Array = showName.split(" ");
+						if (parts.length>1)
 						{
-							showName += (parts[j] as String).charAt(0);
-						}
-						if (showName.toLowerCase()==name.toLowerCase())
-						{
-							// matched initials
-							return showNames[i];
-						}
-					}
-					else
-					{
-						if (showName.toLowerCase().indexOf(name.toLowerCase())!=-1)
-						{
-							// matched shortened show name
-							return showName;
-						}
-						var origNameParts:Array = name.split(" ");
-						if (origNameParts.length>parts.length)
-						{
-							for each(var innerWord:String in origNameParts)
+							// try initials matching
+							showName = "";
+							for (j=0; j<parts.length; j++)
 							{
-								if (showName.toLowerCase()==innerWord.toLowerCase())
+								showName += (parts[j] as String).charAt(0);
+							}
+							if (showName.toLowerCase()==name.toLowerCase())
+							{
+								// matched initials
+								return showNames[i];
+							}
+							showName = nameAlternatives[k];
+							// try removing leading words from original name
+							origNameParts = name.split(" ");
+							while (origNameParts.length)
+							{
+								origNameParts.shift();
+								if (origNameParts.join(" ").toLowerCase()==showName.toLowerCase())
 								{
-									// match original name contains the show name within it
-									return showName;
+									return showNames[i];
+								}
+							}
+							// try removing trailing words from original name
+							origNameParts = name.split(" ");
+							while (origNameParts.length)
+							{
+								origNameParts.pop();
+								if (origNameParts.join(" ").toLowerCase()==showName.toLowerCase())
+								{
+									return showNames[i];
+								}
+							}
+						}
+						else
+						{
+							if (showName.toLowerCase().indexOf(name.toLowerCase())!=-1)
+							{
+								// matched shortened show name
+								return showName;
+							}
+							origNameParts = name.split(" ");
+							if (origNameParts.length>parts.length)
+							{
+								for each(var innerWord:String in origNameParts)
+								{
+									if (showName.toLowerCase()==innerWord.toLowerCase())
+									{
+										// match original name contains the show name within it
+										return showName;
+									}
 								}
 							}
 						}

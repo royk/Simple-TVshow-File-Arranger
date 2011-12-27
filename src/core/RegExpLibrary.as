@@ -15,7 +15,8 @@ package core
 
 		// General Purpose
 		static public const NAME_SEPARATOR:RegExp	= /\s*[-]\s*$/;
-		static public const WHITE_SPACE_TRIM:RegExp	= /[ \t]+$/gi;
-		static public const NUMBER_TRIM:RegExp		= /[ \d]+$/gi;
+		static public const WHITE_SPACE_TRIM:RegExp	= /[\t]+$/gi;
+		static public const NUMBER_TRIM:RegExp		= /[\d]+/gi;
+		static public const SYMBOLS_TRIM:RegExp		= /[?<>*|\/:\\\-.]+/gi;
 	}
 }

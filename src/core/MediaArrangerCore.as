@@ -106,6 +106,8 @@ package core
 					var season:String 	= episodeInfo[1];
 					var episode:String 	= episodeInfo[2];
 
+					// try to see if season+episode is actually year
+					var seasonEpisode:String = season.concat(episode);
 					// if season + episode is a three number string, we need to decide which is which.
 					// assume that episode is up to 20 (not sure if there's a rule for how many episodes there are in a season)
 					// and that if episode is under 20, then season must be a smaller number.

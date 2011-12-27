@@ -1,9 +1,9 @@
-<!-- Simple TV Organizer 'Atom' version settings file -->
+<!-- Movem 1.0 Beta settings file -->
 <settings>
-	<inputDir>c:\showtest</inputDir>
-	<outputDir>c:\shows</outputDir>
-	<xbmcDB>c:\MyVideos34.db</xbmcDB>
+	<inputDir>c:\</inputDir>
+	<outputDir>c:\</outputDir>
+	<xbmcDB>C:\Program Files\XBMC\userdata\Database\MyVideos34.db</xbmcDB>
 	<recursiveScan>true</recursiveScan>
-	<ignoreNewShows>true</ignoreNewShows>
+	<ignoreNewShows>false</ignoreNewShows>
 	<autoRun>false</autoRun>
 </settings>

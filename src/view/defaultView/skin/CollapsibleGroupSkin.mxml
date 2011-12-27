@@ -28,7 +28,7 @@
         /**
          * @copy spark.skins.spark.ApplicationSkin#hostComponent
          */
-        [HostComponent("view.defaultView.skin.CollapsibleGroup")]
+        [HostComponent("view.defaultView.components.CollapsibleGroup")]
 
 
     ]]>
@@ -50,6 +50,21 @@
         <s:State name="disabled" />
 		<s:State name="expanded" />
     </s:states>
+
+	<s:transitions>
+		<s:Transition toState="normal" autoReverse="true">
+			<s:Sequence target="{contentGroup}">
+				<s:SetAction property="visible"/>
+				<s:Resize target="{contentGroup}"/>
+			</s:Sequence>
+		</s:Transition>
+		<s:Transition toState="expanded" autoReverse="true">
+			<s:Sequence target="{contentGroup}">
+				<s:Resize target="{contentGroup}"/>
+				<s:SetAction property="visible"/>
+			</s:Sequence>
+		</s:Transition>
+	</s:transitions>
 	<s:layout>
 		<s:VerticalLayout gap="0"/>
 	</s:layout>
@@ -60,7 +75,7 @@
 		<s:Label id="label" styleName="buttonLabel" verticalAlign="middle"/>
 	</s:SkinnableContainer>
 
-	<s:Group id="contentGroup" width="100%" top="0" bottom="0" minWidth="0" minHeight="0" includeIn="expanded">
+	<s:Group id="contentGroup" width="100%"  height="0" height.expanded="100%" visible="false" visible.expanded="true">
 		<s:layout>
 			<s:VerticalLayout/>
 		</s:layout>

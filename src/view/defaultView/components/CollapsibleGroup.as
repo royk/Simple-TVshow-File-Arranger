@@ -1,4 +1,4 @@
-package view.defaultView.skin
+package view.defaultView.components
 {
 	import flash.events.MouseEvent;
 

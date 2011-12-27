@@ -40,15 +40,9 @@
 		</s:fill>
 	</s:Rect>
 
-	<s:Rect left="0" right="0" top="0" bottom="0" includeIn="hovered">
+	<s:Rect left="0" right="0" top="0" bottom="0">
 		<s:fill>
-			<s:SolidColor color="#CCFFFF"/>
-		</s:fill>
-	</s:Rect>
-
-	<s:Rect left="0" right="0" top="0" bottom="0" includeIn="selected">
-		<s:fill>
-			<s:SolidColor color="#CCCCFF"/>
+			<s:SolidColor color="#CCCCFF" alpha.hovered="0.5" alpha.selected="1" alpha.normal="0"/>
 		</s:fill>
 	</s:Rect>
 

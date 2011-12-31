@@ -87,7 +87,7 @@
 	<s:HGroup verticalAlign="middle">
 	    <s:Group verticalCenter="0" layoutDirection="ltr" buttonMode="true" buttonMode.disabledStates="false">
 			<s:BitmapImage source="assets/checkbox.png"/>
-			<s:BitmapImage source="assets/ok.png" includeIn="selectedStates" id="check" itemCreationPolicy="immediate"/>
+			<s:BitmapImage source="assets/ok.png" visible.selectedStates="true" visible="false" id="check" />
 	    </s:Group>
 	    <s:Label id="labelDisplay"
 	             textAlign="start"

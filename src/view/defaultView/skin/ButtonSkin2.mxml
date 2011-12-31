@@ -57,7 +57,7 @@
 			<s:SolidColor color="0xE6E5E4"/>
 		</s:fill>
 	</s:Rect>
-	<s:HGroup gap="5" verticalAlign="middle" top.down="2" top.notDown="0">
+	<s:HGroup gap="5" verticalAlign="middle" left="5" right="0" top.notDown="0" top.down="2" bottom.notDown="0" bottom.down="-2">
 		<s:BitmapImage id="iconSymbol"/>
 	    <s:Label id="labelDisplay">
 	    </s:Label>

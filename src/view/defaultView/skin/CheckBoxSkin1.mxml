@@ -84,40 +84,16 @@
         <s:State name="downAndSelected" stateGroups="downStates, selectedStates" />
         <s:State name="disabledAndSelected" stateGroups="disabledStates, selectedStates" />
     </s:states>
-
-    <s:Group verticalCenter="0" width="25" height="25" layoutDirection="ltr" buttonMode="true" buttonMode.disabledStates="false">
-		<!--Outer rect (stroke)-->
-		<s:Rect left="0" right="0" top="0" bottom="0" radiusX="8" radiusY="8">
-			<s:fill>
-				<s:SolidColor color="0xAAAAAA"/>
-			</s:fill>
-		</s:Rect>
-		<!--Inner rect (fill)-->
-		<s:Rect left="2" right="2" top="2" bottom="2" radiusX="5" radiusY="5">
-			<s:fill>
-				<s:SolidColor color="0xFFFFFF"/>
-			</s:fill>
-		</s:Rect>
-        <!-- checkmark -->
-        <!--- The checkmark in the box for this skin. To create a custom check mark, create a custom skin class. -->
-        <!--<s:Path left="2" top="0" includeIn="selectedStates" id="check" itemCreationPolicy="immediate"
-                data="M54.75 35.75 57 38 37 57 26 44 28.6 41.75 37.5 53.1 54.75 35.75">
-			<s:stroke>
-				<s:SolidColorStroke color="0xF6A335"/>
-			</s:stroke>
-            <s:fill>
-                <s:SolidColor id="checkMarkFill" color="0xF6A335"  />
-            </s:fill>
-        </s:Path>-->
-		<s:BitmapImage top="-5" source="assets/check-v.png" includeIn="selectedStates" id="check" itemCreationPolicy="immediate"/>
-    </s:Group>
-
-    <!-- Label -->
-    <!--- @copy spark.components.supportClasses.ButtonBase#labelDisplay -->
-    <s:Label id="labelDisplay"
-             textAlign="start"
-             verticalAlign="middle"
-             maxDisplayedLines="1"
-             left="32" right="0" top="3" bottom="3" verticalCenter="2" />
+	<s:HGroup verticalAlign="middle">
+	    <s:Group verticalCenter="0" layoutDirection="ltr" buttonMode="true" buttonMode.disabledStates="false">
+			<s:BitmapImage source="assets/checkbox.png"/>
+			<s:BitmapImage source="assets/ok.png" includeIn="selectedStates" id="check" itemCreationPolicy="immediate"/>
+	    </s:Group>
+	    <s:Label id="labelDisplay"
+	             textAlign="start"
+	             verticalAlign="middle"
+	             maxDisplayedLines="1"
+	              />
+	</s:HGroup>
 
 </s:SparkSkin>

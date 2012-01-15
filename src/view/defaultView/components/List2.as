@@ -3,6 +3,8 @@ package view.defaultView.components
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
 
+	import mx.collections.ArrayList;
+
 	import spark.components.List;
 
 	public class List2 extends List
@@ -17,11 +19,16 @@ package view.defaultView.components
 			super.keyDownHandler( event );
 			if (event.ctrlKey && event.keyCode==Keyboard.A)
 			{
-				selectAllItems(length);
+				selectAllItems();
+			}
+			else
+			if (event.keyCode==Keyboard.DELETE)
+			{
+				removeSelectedItems();
 			}
 		}
 
-		private function selectAllItems(length:int):void
+		private function selectAllItems():void
 		{
 			var selItems:Vector.<int> = new Vector.<int>();
 			for (var i:int=0; i<dataProvider.length; i++)
@@ -29,6 +36,15 @@ package view.defaultView.components
 				selItems.push(i);
 			}
 			selectedIndices = selItems.concat();
+		}
+
+		public function removeSelectedItems():void
+		{
+			for each (var o:Object in selectedItems)
+			{
+				(dataProvider as ArrayList).removeItem(o);
+			}
+			dataGroup.invalidateDisplayList();
 		}
 
 

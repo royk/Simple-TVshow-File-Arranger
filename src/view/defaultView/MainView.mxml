@@ -186,7 +186,7 @@
 							<s:CheckBox buttonMode="true" label="Remember this decision" toolTip="The file name schema you modified will be stored and the changes you applied will be automatically applied next time" enabled="false"/>
 							<s:HGroup width="100%">
 								<components:IconButton label="Apply to selection" icon="assets/ok.png" click="{m_presenter.applyModificationToSelection(pendingList.selectedItems, applyNameChange.selected, applySeasonChange.selected); pendingList.dataGroup.invalidateDisplayList();}" skinClass="view.defaultView.skin.ButtonSkin2" width="100%" height="32" buttonMode="true" />
-								<components:IconButton label="Remove selection" icon="assets/x.png" click="{m_presenter.removeFromPendingList(pendingList.selectedItems);pendingList.dataGroup.invalidateDisplayList();}" skinClass="view.defaultView.skin.ButtonSkin2" width="100%" height="32" buttonMode="true"/>
+								<components:IconButton label="Remove selection" icon="assets/x.png" click="{pendingList.removeSelectedItems();}" skinClass="view.defaultView.skin.ButtonSkin2" width="100%" height="32" buttonMode="true"/>
 							</s:HGroup>
 						</s:SkinnableContainer>
 					</s:VGroup>

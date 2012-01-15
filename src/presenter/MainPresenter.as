@@ -313,14 +313,6 @@ package presenter
 			}
 		}
 
-		public function removeFromPendingList(selectedItems:Vector.<Object>):void
-		{
-			for each (var o:Object in selectedItems)
-			{
-				m_movementStack.removeItem(o);
-			}
-		}
-
 		private function writeLog(value:String):void
 		{
 			log += value;

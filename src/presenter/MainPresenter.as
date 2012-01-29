@@ -12,12 +12,15 @@ package presenter
 	import flash.events.MouseEvent;
 	import flash.filesystem.File;
 
+	import mx.collections.ArrayCollection;
 	import mx.collections.ArrayList;
 	import mx.collections.IList;
 	import mx.events.CollectionEvent;
 	import mx.events.ItemClickEvent;
 	import mx.events.PropertyChangeEvent;
 
+	import spark.collections.Sort;
+	import spark.collections.SortField;
 	import spark.components.List;
 
 	import view.IMainView;
@@ -37,7 +40,7 @@ package presenter
 		private var m_log:String = "";
 		private var m_targetPath:String = "";
 
-		private var m_movementStack:ArrayList = new ArrayList();
+		private var m_movementStack:ArrayCollection = new ArrayCollection();
 		private var m_copyInProgress:Boolean = false;
 		private var m_files	:Vector.<String>;
 
@@ -76,12 +79,35 @@ package presenter
 		[Bindable]
 		public function get pendingFiles():IList
 		{
-			return m_movementStack as IList;
+			return m_movementStack;
+		}
+
+		private function preparePendingFilesForDisplay():void
+		{
+			if (m_movementStack.sort==null)
+			{
+				var sort:Sort = new Sort();
+				var sortField:SortField = new SortField();
+				sort.compareFunction = function(a:Object, b:Object, array:Array = null):int
+				{
+					if (a.hasOwnProperty("show") && b.hasOwnProperty("show"))
+					{
+						if (a.show.name>b.show.name)
+							return 1;
+						if (b.show.name>a.show.name)
+							return -1;
+						return 0;
+					}
+					return 1;
+				}
+				m_movementStack.sort = sort;
+			}
+			m_movementStack.refresh();
 		}
 
 		public function set pendingFiles(value:IList):void
 		{
-			m_movementStack = value as ArrayList;
+			m_movementStack = value as ArrayCollection;
 		}
 
 		[Bindable]
@@ -182,6 +208,7 @@ package presenter
 
 			);
 			scanFilesForShows();
+			preparePendingFilesForDisplay();
 		}
 
 		private function checkDBStatus():void

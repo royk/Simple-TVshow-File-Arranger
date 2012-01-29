@@ -1,5 +1,7 @@
 package view
 {
+	import core.mediaInfo.Show;
+
 	public interface IMainView
 	{
 		function setAppArguments(value:Array):void;
@@ -8,10 +10,9 @@ package view
 
 		function showLog():void;
 
+		function set editedShow(value:Show):void;
 		function get showName():String;
-		function set showName(value:String):void;
 
 		function get season():int;
-		function set season(value:int):void;
 	}
 }

@@ -8,6 +8,8 @@
 		<![CDATA[
 			import com.poisontaffy.libs.flex4.PTFlex4Utils;
 
+			import core.mediaInfo.Show;
+
 			import flash.utils.setTimeout;
 
 			import mx.core.UIComponent;
@@ -56,6 +58,22 @@
 			{
 				logContainer.expand();
 				m_utils.scrollToBottom(log);
+			}
+
+			public function set editedShow(value:Show):void
+			{
+				season 		= value.season;
+				showName	= value.name;
+				if (value.isNew)
+				{
+					applyNameChange.selected 	= true;
+					applySeasonChange.selected 	= false;
+				}
+				else
+				{
+					applyNameChange.selected 	= false;
+					applySeasonChange.selected 	= true;
+				}
 			}
 
 			public function get showName():String

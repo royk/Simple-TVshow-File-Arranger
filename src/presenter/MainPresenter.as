@@ -289,8 +289,7 @@ package presenter
 			if (selectedItems.length)
 			{
 				m_currentShow = selectedItems[0].show;
-				m_view.season 		= m_currentShow.season;
-				m_view.showName		= m_currentShow.name;
+				m_view.editedShow = m_currentShow;
 				updateTargetName();
 			}
 		}

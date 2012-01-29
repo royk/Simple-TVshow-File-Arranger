@@ -41,6 +41,7 @@ package presenter
 		private var m_targetPath:String = "";
 
 		private var m_movementStack:ArrayCollection = new ArrayCollection();
+		private var m_displayList:ArrayCollection = new ArrayCollection();
 		private var m_copyInProgress:Boolean = false;
 		private var m_files	:Vector.<String>;
 
@@ -79,35 +80,57 @@ package presenter
 		[Bindable]
 		public function get pendingFiles():IList
 		{
-			return m_movementStack;
+			return m_displayList;
 		}
 
 		private function preparePendingFilesForDisplay():void
 		{
-			if (m_movementStack.sort==null)
+			var arr:Array = m_movementStack.toArray();
+			arr.sort(function(a:Object, b:Object, array:Array = null):int
 			{
-				var sort:Sort = new Sort();
-				var sortField:SortField = new SortField();
-				sort.compareFunction = function(a:Object, b:Object, array:Array = null):int
+				if (a.hasOwnProperty("show") && b.hasOwnProperty("show"))
 				{
-					if (a.hasOwnProperty("show") && b.hasOwnProperty("show"))
-					{
-						if (a.show.name>b.show.name)
-							return 1;
-						if (b.show.name>a.show.name)
-							return -1;
-						return 0;
-					}
-					return 1;
+					if (a.show.name>b.show.name)
+						return 1;
+					if (b.show.name>a.show.name)
+						return -1;
+					return 0;
 				}
-				m_movementStack.sort = sort;
+				return 0;
+			});
+			// setting to pendingFiles causes the binding to update. If we set directly to m_displayList, we lose the bind.
+			pendingFiles = new ArrayCollection(arr);
+			var currShow:String = "";
+			var headers:Array = new Array();
+			var i:int;
+			var o:Object;
+			for (i=0; i<m_movementStack.length; i++)
+			{
+				o = m_displayList.getItemAt(i);
+				if (o.hasOwnProperty("show"))
+				{
+					var show:Show = o.show as Show;
+					if (show.isNew==false && currShow!=show.name)
+					{
+						currShow = show.name;
+						headers.push(o);
+					}
+				}
 			}
-			m_movementStack.refresh();
+			for (i=0; i<headers.length; i++)
+			{
+				o = headers[i];
+				var loc:int = m_displayList.getItemIndex(o);
+				if (loc>-1)
+				{
+					m_displayList.addItemAt(o.show.name, loc);
+				}
+			}
 		}
 
 		public function set pendingFiles(value:IList):void
 		{
-			m_movementStack = value as ArrayCollection;
+			m_displayList = value as ArrayCollection;
 		}
 
 		[Bindable]
@@ -252,7 +275,7 @@ package presenter
 				var newLocation:File = new File(targetPath);
 				if (newLocation.exists==false)
 				{
-					pendingFiles.addItem({	file:moveFile,
+					m_movementStack.addItem({	file:moveFile,
 						location:newLocation,
 						pathBase:settings.outputDir,
 						show:m_currentShow});
@@ -315,9 +338,12 @@ package presenter
 		{
 			if (selectedItems.length)
 			{
-				m_currentShow = selectedItems[0].show;
-				m_view.editedShow = m_currentShow;
-				updateTargetName();
+				if (selectedItems[0].hasOwnProperty("show"))
+				{
+					m_currentShow = selectedItems[0].show;
+					m_view.editedShow = m_currentShow;
+					updateTargetName();
+				}
 			}
 		}
 

@@ -5,11 +5,12 @@
 				autoDrawBackground="true" buttonMode="true">
 	<fx:Script>
 		<![CDATA[
+
 			override public function set data(value:Object):void
 			{
 				if (value && value.show)
 				{
-					var showNewIdentifier:String = "";
+					var showNewIdentifier:String = "    ";
 					toolTip = "";
 					if (value.show.isNew)
 					{

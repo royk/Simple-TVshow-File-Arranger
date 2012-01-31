@@ -3,7 +3,7 @@ package view.defaultView.components
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
 
-	import mx.collections.ArrayCollection;
+	import mx.collections.ArrayList;
 
 	import spark.components.List;
 
@@ -42,8 +42,8 @@ package view.defaultView.components
 		{
 			for each (var o:Object in selectedItems)
 			{
-				var index:int = (dataProvider as ArrayCollection).getItemIndex(o);
-				(dataProvider as ArrayCollection).removeItemAt(index);
+				var index:int = (dataProvider as ArrayList).getItemIndex(o);
+				(dataProvider as ArrayList).removeItemAt(index);
 			}
 			dataGroup.invalidateDisplayList();
 		}

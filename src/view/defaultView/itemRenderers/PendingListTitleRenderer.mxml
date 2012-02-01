@@ -16,7 +16,7 @@
 
 			private function updateDisplay():void
 			{
-				showPath.text = (data.folded?"< ":"> ")+data.show.name;
+				showPath.text = (data.folded?"< ":"> ")+data.show.viewName;
 			}
 
 			protected function itemrenderer1_clickHandler(event:MouseEvent):void

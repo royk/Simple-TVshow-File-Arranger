@@ -177,6 +177,8 @@ package core
 						}
 						show.fileName 	= fileName;
 						show.name 		= name;
+						show.viewName	= name;
+						show.viewName	= show.viewName.replace(/&amp;/gi, "&");
 						show.episode 	= Number(RegExpLibrary.TV_EPISODE_NUMBER.exec(episode)[1]);
 						show.season 	= Number(RegExpLibrary.TV_SEASON_NUMBER.exec(season)[1]);
 					}

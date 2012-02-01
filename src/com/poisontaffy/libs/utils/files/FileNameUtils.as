@@ -6,6 +6,7 @@ package com.poisontaffy.libs.utils.files
 		{
 			// remove trailing slash
 			value = value.replace(/\\$/, "");
+
 			return value;
 		}
 	}

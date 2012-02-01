@@ -4,9 +4,11 @@
 					   xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:defaultView="view.defaultView.*"
 					   width="800"
 					   height="600" minWidth="531" minHeight="577"
-					   invoke="windowedapplication1_invokeHandler(event)" resize="windowedapplication1_resizeHandler(event)">
+					   invoke="windowedapplication1_invokeHandler(event)" resize="windowedapplication1_resizeHandler(event)" >
 	<fx:Script>
 		<![CDATA[
+			import com.poisontaffy.biui.events.BIMEvent;
+
 			import mx.events.ResizeEvent;
 			protected function windowedapplication1_invokeHandler(event:InvokeEvent):void
 			{
@@ -18,6 +20,8 @@
 			{
 				trace(width,height);
 			}
+
+
 
 		]]>
 	</fx:Script>

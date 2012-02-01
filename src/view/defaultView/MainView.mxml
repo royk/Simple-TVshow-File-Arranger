@@ -3,7 +3,7 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 xmlns:mx="library://ns.adobe.com/flex/mx" height="100%" width="100%"
 		 creationComplete="windowedapplication1_creationCompleteHandler(event)"
-		 implements="view.IMainView" xmlns:skin="view.defaultView.skin.*" styleName="" xmlns:components="view.defaultView.components.*">
+		 implements="view.IMainView" xmlns:skin="view.defaultView.skin.*" styleName="" xmlns:components="view.defaultView.components.*" xmlns:local="*" xmlns:components1="com.poisontaffy.biui.components.*">
 	<fx:Script>
 		<![CDATA[
 			import view.defaultView.itemRenderers.PendingListTitleRenderer;
@@ -193,7 +193,7 @@
 						</s:SkinnableContainer>
 					</s:VGroup>
 					<s:HGroup horizontalAlign="right" width="100%">
-						<s:Button buttonMode="true" label="FIND" width="108" height="38" click="{m_presenter.scanDirectory()}"  skinClass="view.defaultView.skin.ButtonSkin1"/>
+						<s:Button buttonMode="true" label="FIND" width="108" height="38" click="{m_presenter.scanDirectory()}"  skinClass="view.defaultView.skin.ButtonSkin1" id="but1"/>
 					</s:HGroup>
 					<mx:Spacer height="10"/>
 					<s:VGroup gap="-4" width="100%">
@@ -237,4 +237,7 @@
 			</s:SkinnableContainer>
 		</s:Group>
 	</s:SkinnableContainer>
+	<components1:BIMaster id="bim">
+		<components1:BITarget target="{but1}" targetName="find_button" type="click"/>
+	</components1:BIMaster>
 </s:Group>

@@ -16,7 +16,10 @@
 
 			private function updateDisplay():void
 			{
-				showPath.text = (data.folded?"< ":"> ")+data.show.name;
+				if (data)
+				{
+					showPath.text = (data.folded?"< ":"> ")+data.show.name;
+				}
 			}
 
 			protected function itemrenderer1_clickHandler(event:MouseEvent):void

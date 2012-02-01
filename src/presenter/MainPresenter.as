@@ -41,7 +41,6 @@ package presenter
 		private var m_log:String = "";
 		private var m_targetPath:String = "";
 
-		private var m_movementStack:ArrayList = new ArrayList();
 		private var m_displayList:ShowsDisplayList = new ShowsDisplayList();
 		private var m_copyInProgress:Boolean = false;
 		private var m_files	:Vector.<String>;
@@ -81,7 +80,7 @@ package presenter
 		[Bindable]
 		public function get pendingFiles():IList
 		{
-			return m_displayList.list;
+			return m_displayList;
 		}
 
 		public function set pendingFiles(value:IList):void
@@ -187,7 +186,6 @@ package presenter
 
 			);
 			scanFilesForShows();
-			m_displayList.moveList = m_movementStack;
 		}
 
 		private function checkDBStatus():void
@@ -231,7 +229,7 @@ package presenter
 				var newLocation:File = new File(targetPath);
 				if (newLocation.exists==false)
 				{
-					m_movementStack.addItem({	file:moveFile,
+					m_displayList.moveList.addItem({	file:moveFile,
 						location:newLocation,
 						pathBase:settings.outputDir,
 						show:m_currentShow});
@@ -245,7 +243,7 @@ package presenter
 
 		public function moveNextFile():void
 		{
-			if (pendingFiles.length>0)
+			if (m_displayList.moveList.length>0)
 			{
 
 				m_view.disableUI();
@@ -254,8 +252,8 @@ package presenter
 				{
 					writeLog("Starting files move.");
 				}
-				var data:Object = pendingFiles.getItemAt(0);
-				(pendingFiles as ArrayList).removeItem(data);
+				var data:Object = m_displayList.moveList.getItemAt(0);
+				m_displayList.moveList.removeItem(data);
 				m_core.moveFiles(data.file.nativePath, data.location.nativePath, this);
 				m_parallelMoves++;
 				moveNextFile();
@@ -317,7 +315,7 @@ package presenter
 				}
 				o.location = new File(getTargetName(o.show));
 				o.label = o.location.nativePath;
-				m_movementStack.itemUpdated(o);
+				m_displayList.moveList.itemUpdated(o);
 			}
 		}
 

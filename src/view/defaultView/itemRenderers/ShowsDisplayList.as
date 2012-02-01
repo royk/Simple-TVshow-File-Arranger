@@ -3,18 +3,25 @@ package view.defaultView.itemRenderers
 	import core.mediaInfo.Show;
 
 	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	import flash.events.IEventDispatcher;
 
 	import mx.collections.ArrayList;
+	import mx.collections.IList;
+	import mx.events.CollectionEvent;
 
-	public class ShowsDisplayList
+	public class ShowsDisplayList implements IList, IEventDispatcher
 	{
+		private var m_moveList:ArrayList = new ArrayList();
 		private var m_list:ArrayList = new ArrayList();
 		private var m_unfoldedList:ArrayList = new ArrayList();
 		private var m_headers:Array;
 
 		public function ShowsDisplayList()
 		{
+			m_moveList.addEventListener(CollectionEvent.COLLECTION_CHANGE, onCollectionChanged);
 		}
+
 
 		public function get list():ArrayList
 		{
@@ -29,7 +36,28 @@ package view.defaultView.itemRenderers
 
 		public function set moveList(value:ArrayList):void
 		{
-			var arr:Array = value.toArray();
+			if (m_moveList)
+			{
+				m_moveList.removeEventListener(CollectionEvent.COLLECTION_CHANGE, onCollectionChanged);
+			}
+			m_moveList = value;
+			m_moveList.addEventListener(CollectionEvent.COLLECTION_CHANGE, onCollectionChanged);
+			updateShowList();
+		}
+
+		public function get moveList():ArrayList
+		{
+			return m_moveList;
+		}
+
+		private function onCollectionChanged(ev:CollectionEvent):void
+		{
+			updateShowList();
+		}
+
+		private function updateShowList():void
+		{
+			var arr:Array = m_moveList.toArray();
 			arr.sort(function(a:Object, b:Object, array:Array = null):int
 			{
 				if (a.hasOwnProperty("show") && b.hasOwnProperty("show"))
@@ -138,5 +166,98 @@ package view.defaultView.itemRenderers
 			}
 
 		}
+
+		// ILIST implementation
+
+		public function addItem(item:Object):void
+		{
+			m_list.addItem(item);
+		}
+
+		public function addItemAt(item:Object, index:int):void
+		{
+			m_list.addItemAt(item, index);
+		}
+
+		public function getItemAt(index:int, prefetch:int=0):Object
+		{
+			return m_list.getItemAt(index, prefetch);
+		}
+
+		public function getItemIndex(item:Object):int
+		{
+			return m_list.getItemIndex(item);
+		}
+
+		public function itemUpdated(item:Object, property:Object=null, oldValue:Object=null, newValue:Object=null):void
+		{
+			m_list.itemUpdated(item, property, oldValue, newValue);
+		}
+
+		public function get length():int
+		{
+			return m_list.length;
+		}
+
+		public function removeAll():void
+		{
+			m_moveList.removeAll();
+		}
+
+		public function removeItem(item:Object):Object
+		{
+			return m_moveList.removeItem(item);
+		}
+
+		public function removeItemAt(index:int):Object
+		{
+			var item:Object = m_list.getItemAt(index);
+			var actualIndex:int = m_moveList.getItemIndex(item);
+			if (actualIndex>=0)
+			{
+				m_moveList.removeItem(item);
+			}
+			return item;
+		}
+
+		public function setItemAt(item:Object, index:int):Object
+		{
+			return m_list.setItemAt(item, index);
+		}
+
+		public function toArray():Array
+		{
+			return m_list.toArray();
+		}
+
+		//IEVENTDISPATCHER
+
+
+		public function addEventListener(type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void
+		{
+			m_list.addEventListener(type, listener, useCapture, priority, useWeakReference);
+		}
+
+		public function dispatchEvent(event:Event):Boolean
+		{
+
+			return m_list.dispatchEvent(event);
+		}
+
+		public function hasEventListener(type:String):Boolean
+		{
+			return m_list.hasEventListener(type);
+		}
+
+		public function removeEventListener(type:String, listener:Function, useCapture:Boolean=false):void
+		{
+			m_list.removeEventListener(type, listener, useCapture);
+		}
+
+		public function willTrigger(type:String):Boolean
+		{
+			return m_list.willTrigger(type);
+		}
+
 	}
 }

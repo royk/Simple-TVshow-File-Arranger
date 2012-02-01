@@ -42,8 +42,10 @@ package view.defaultView.components
 		{
 			for each (var o:Object in selectedItems)
 			{
-				var index:int = (dataProvider as ArrayList).getItemIndex(o);
-				(dataProvider as ArrayList).removeItemAt(index);
+				if ((dataProvider as Object).hasOwnProperty("removeItem"))
+				{
+					(dataProvider as Object).removeItem(o);
+				}
 			}
 			dataGroup.invalidateDisplayList();
 		}

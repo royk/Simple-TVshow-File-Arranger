@@ -10,14 +10,7 @@
 			{
 				if (value && value.show)
 				{
-					var showNewIdentifier:String = "    ";
-					toolTip = "";
-					if (value.show.isNew)
-					{
-						showNewIdentifier = "*";
-						toolTip = "The asterix indicates that this show file didn't match any of the shows in your XBMC DB, i.e. it's a new show";
-					}
-					showPath.htmlText = showNewIdentifier + value.pathBase+"\\<font color='#ff0000'>"+value.show.name+"</font>"+"\\<font color='#c71585'>s"+value.show.season+"</font>\\"+value.show.fileName;
+					showPath.htmlText = "\t" + value.pathBase+"\\<font color='#ff0000'>"+value.show.name+"</font>"+"\\<font color='#c71585'>s"+value.show.season+"</font>\\"+value.show.fileName;
 				}
 				if (bgFill)
 				{
